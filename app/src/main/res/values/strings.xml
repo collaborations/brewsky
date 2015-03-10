@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Brewsky</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_recipe_detail">Recipe Details</string>
+    <string name="title_activity_recipe_instructions">Instructions</string>
+</resources>
