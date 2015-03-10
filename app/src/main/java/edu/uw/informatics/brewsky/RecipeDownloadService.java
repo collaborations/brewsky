@@ -158,6 +158,10 @@ public class RecipeDownloadService extends IntentService {
         return spices;
     }
 
+    /**
+     * Assuming the next item in the JsonReader is a Yeast object, it returns an ArrayList of
+     * @return
+     */
     private ArrayList<Yeast> createYeast(){
         ArrayList<Yeast> yeast = new ArrayList<>();
         try {
