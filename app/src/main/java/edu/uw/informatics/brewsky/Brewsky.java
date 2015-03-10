@@ -9,8 +9,11 @@ import android.util.Log;
 public class Brewsky extends Application {
     private static Brewsky instance;
 
-    private Brewsky(){
-        instance = (Brewsky)getApplication();
+    /* Application manifest throws an error if I set this as private. I don't believe we want a
+     * public constructor though, otherwise you could create another app instance.
+     */
+    public Brewsky(){
+        this.instance = getInstance();
     }
 
     public static Brewsky getInstance(){
