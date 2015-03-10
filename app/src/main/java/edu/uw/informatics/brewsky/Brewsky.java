@@ -13,7 +13,7 @@ public class Brewsky extends Application {
      * public constructor though, otherwise you could create another app instance.
      */
     public Brewsky(){
-        this.instance = getInstance();
+        //this.instance = getInstance();
     }
 
     public static Brewsky getInstance(){

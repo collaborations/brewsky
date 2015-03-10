@@ -63,10 +63,11 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         holder.name.setText("Testing");
         holder.abv.setText("8.9%");
         holder.brewTime.setText("1 month");
-        holder.rating.setImageResource(R.drawable.threeStar);
-        holder.type.setImageResource(R.drawable.amberAle);
+        holder.rating.setImageResource(R.drawable.three_star);
+        holder.type.setImageResource(R.drawable.amber_ale);
 
         /*
+        // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
         holder.abv.setText(recipe.getAbv());
         holder.brewTime.setText(recipe.getBrewTime());

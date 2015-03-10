@@ -1,0 +1,434 @@
+[
+  {
+    "id": "527d35c9d196b5453a000007",
+    "parent": null,
+    "user": {
+      "id": "5262c92c349e253115000001",
+      "name": "daniel-taylor",
+      "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
+    },
+    "slug": "american-pale-ale",
+    "created": "2013-11-08T19:04:41.576Z",
+    "private": false,
+    "data": {
+      "agingDays": 14,
+      "agingTemp": 20,
+      "agingTempF": 68,
+      "author": "Anonymous Brewer",
+      "batchSize": 20,
+      "batchSizeGallons": 5.283440000000001,
+      "boilSize": 10,
+      "boilSizeGallons": 2.6417200000000003,
+      "bottlingPressure": 2.5,
+      "bottlingTemp": 23,
+      "bottlingTempF": 73.4,
+      "description": "A basic recipe for everyday drinking",
+      "fermentables": [
+        {
+          "name": "Pale liquid extract",
+          "weight": 4,
+          "yield": 76,
+          "color": 4,
+          "late": false
+        },
+        {
+          "name": "Caramel 60L",
+          "weight": 0.25,
+          "yield": 72,
+          "color": 60,
+          "late": false
+        }
+      ],
+      "ibuMethod": "tinseth",
+      "mash": null,
+      "mashEfficiency": 75,
+      "name": "American Pale Ale",
+      "primaryDays": 14,
+      "primaryTemp": 20,
+      "primaryTempF": 68,
+      "secondaryDays": 0,
+      "secondaryTemp": 0,
+      "secondaryTempF": 32,
+      "servingSize": 0.355,
+      "servingSizeOz": 0.09378106,
+      "spices": [
+        {
+          "name": "Chinook",
+          "weight": 0.018,
+          "aa": 12,
+          "use": "boil",
+          "time": 60,
+          "form": "pellet"
+        },
+        {
+          "name": "Citra",
+          "weight": 0.028,
+          "aa": 10,
+          "use": "boil",
+          "time": 20,
+          "form": "pellet"
+        },
+        {
+          "name": "Cascade",
+          "weight": 0.028,
+          "aa": 6,
+          "use": "boil",
+          "time": 5,
+          "form": "pellet"
+        }
+      ],
+      "steepEfficiency": 50,
+      "steepTime": 20,
+      "style": null,
+      "tertiaryDays": 0,
+      "tertiaryTemp": 0,
+      "tertiaryTempF": 32,
+      "yeast": [
+        {
+          "name": "Wyeast 1056 - American Ale",
+          "type": "ale",
+          "form": "liquid",
+          "attenuation": 77
+        }
+      ]
+    }
+  },
+  {
+    "id": "527d348cd196b5453a000003",
+    "parent": null,
+    "user": {
+      "id": "5262c92c349e253115000001",
+      "name": "daniel-taylor",
+      "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
+    },
+    "slug": "dark-beer",
+    "created": "2013-11-08T18:59:24.283Z",
+    "private": false,
+    "data": {
+      "agingDays": 14,
+      "agingTemp": 20,
+      "agingTempF": 68,
+      "author": "daniel-taylor",
+      "batchSize": 20,
+      "batchSizeGallons": 5.283440000000001,
+      "boilSize": 10,
+      "boilSizeGallons": 2.6417200000000003,
+      "bottlingPressure": 2.5,
+      "bottlingTemp": 23,
+      "bottlingTempF": 73.4,
+      "description": "This is a test dark beer!",
+      "fermentables": [
+        {
+          "name": "Pale liquid extract",
+          "weight": 4,
+          "yield": 76,
+          "color": 4,
+          "late": false
+        },
+        {
+          "name": "Chocolate",
+          "weight": 0.75,
+          "yield": 65,
+          "color": 350,
+          "late": false
+        }
+      ],
+      "ibuMethod": "tinseth",
+      "mash": null,
+      "mashEfficiency": 75,
+      "name": "Dark Beer",
+      "primaryDays": 14,
+      "primaryTemp": 20,
+      "primaryTempF": 68,
+      "secondaryDays": 0,
+      "secondaryTemp": 0,
+      "secondaryTempF": 32,
+      "servingSize": 0.355,
+      "servingSizeOz": 0.09378106,
+      "spices": [
+        {
+          "name": "Cascade",
+          "weight": 0.028,
+          "aa": 6,
+          "use": "boil",
+          "time": 60,
+          "form": "pellet"
+        },
+        {
+          "name": "Cascade",
+          "weight": 0.028,
+          "aa": 6,
+          "use": "boil",
+          "time": 20,
+          "form": "pellet"
+        },
+        {
+          "name": "Cascade",
+          "weight": 0.028,
+          "aa": 6,
+          "use": "boil",
+          "time": 5,
+          "form": "pellet"
+        }
+      ],
+      "steepEfficiency": 50,
+      "steepTime": 20,
+      "style": null,
+      "tertiaryDays": 0,
+      "tertiaryTemp": 0,
+      "tertiaryTempF": 32,
+      "yeast": [
+        {
+          "name": "Wyeast 3711 - French Saison",
+          "type": "ale",
+          "form": "liquid",
+          "attenuation": 83
+        }
+      ]
+    }
+  },
+  {
+    "id": "527d3424d196b5453a000001",
+    "parent": null,
+    "user": {
+      "id": "5262c92c349e253115000001",
+      "name": "daniel-taylor",
+      "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
+    },
+    "slug": "hefeweizen",
+    "created": "2013-11-08T18:57:40.980Z",
+    "private": false,
+    "data": {
+      "agingDays": 14,
+      "agingTemp": 20,
+      "agingTempF": 68,
+      "author": "daniel-taylor",
+      "batchSize": 20,
+      "batchSizeGallons": 5.283440000000001,
+      "boilSize": 10,
+      "boilSizeGallons": 2.6417200000000003,
+      "bottlingPressure": 2.5,
+      "bottlingTemp": 23,
+      "bottlingTempF": 73.4,
+      "description": "Another test recipe",
+      "fermentables": [
+        {
+          "name": "Wheat liquid extract",
+          "weight": 3.5,
+          "yield": 75,
+          "color": 3,
+          "late": false
+        }
+      ],
+      "ibuMethod": "rager",
+      "mash": null,
+      "mashEfficiency": 75,
+      "name": "Hefeweizen",
+      "primaryDays": 14,
+      "primaryTemp": 20,
+      "primaryTempF": 68,
+      "secondaryDays": 0,
+      "secondaryTemp": 0,
+      "secondaryTempF": 32,
+      "servingSize": 0.355,
+      "servingSizeOz": 0.09378106,
+      "spices": [
+        {
+          "name": "Hallertau Hersbrucker",
+          "weight": 0.028,
+          "aa": 3.5,
+          "use": "boil",
+          "time": 60,
+          "form": "pellet"
+        },
+        {
+          "name": "Hallertau Hersbrucker",
+          "weight": 0.008,
+          "aa": 3.5,
+          "use": "boil",
+          "time": 1,
+          "form": "pellet"
+        }
+      ],
+      "steepEfficiency": 50,
+      "steepTime": 20,
+      "style": null,
+      "tertiaryDays": 0,
+      "tertiaryTemp": 0,
+      "tertiaryTempF": 32,
+      "yeast": [
+        {
+          "name": "Wyeast 3068 - Weihenstephan Weizen",
+          "type": "ale",
+          "form": "liquid",
+          "attenuation": 77
+        }
+      ]
+    }
+  },
+  {
+    "id": "527d34f5d196b5453a000005",
+    "parent": null,
+    "user": {
+      "id": "5262c92c349e253115000001",
+      "name": "daniel-taylor",
+      "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
+    },
+    "slug": "irish-red",
+    "created": "2013-11-08T19:01:09.013Z",
+    "private": false,
+    "data": {
+      "agingDays": 14,
+      "agingTemp": 20,
+      "agingTempF": 68,
+      "author": "daniel-taylor",
+      "batchSize": 20,
+      "batchSizeGallons": 5.283440000000001,
+      "boilSize": 10,
+      "boilSizeGallons": 2.6417200000000003,
+      "bottlingPressure": 2.5,
+      "bottlingTemp": 23,
+      "bottlingTempF": 73.4,
+      "description": "Yum! What a beer.",
+      "fermentables": [
+        {
+          "name": "Amber liquid extract",
+          "weight": 3.5,
+          "yield": 75,
+          "color": 10,
+          "late": false
+        },
+        {
+          "name": "Caramel 40L",
+          "weight": 0.5,
+          "yield": 73,
+          "color": 40,
+          "late": false
+        }
+      ],
+      "ibuMethod": "tinseth",
+      "mash": null,
+      "mashEfficiency": 75,
+      "name": "Irish Red",
+      "primaryDays": 14,
+      "primaryTemp": 20,
+      "primaryTempF": 68,
+      "secondaryDays": 0,
+      "secondaryTemp": 0,
+      "secondaryTempF": 32,
+      "servingSize": 0.355,
+      "servingSizeOz": 0.09378106,
+      "spices": [
+        {
+          "name": "Brewers Gold",
+          "weight": 0.028,
+          "aa": 8,
+          "use": "boil",
+          "time": 60,
+          "form": "pellet"
+        },
+        {
+          "name": "East Kent Goldings",
+          "weight": 0.028,
+          "aa": 5.5,
+          "use": "boil",
+          "time": 20,
+          "form": "pellet"
+        },
+        {
+          "name": "Fuggles",
+          "weight": 0.028,
+          "aa": 4.5,
+          "use": "boil",
+          "time": 5,
+          "form": "pellet"
+        }
+      ],
+      "steepEfficiency": 50,
+      "steepTime": 20,
+      "style": null,
+      "tertiaryDays": 0,
+      "tertiaryTemp": 0,
+      "tertiaryTempF": 32,
+      "yeast": [
+        {
+          "name": "WLP004 - Irish Ale",
+          "type": "ale",
+          "form": "liquid",
+          "attenuation": 72
+        }
+      ]
+    }
+  },
+  {
+    "id": "52661f1a47e21bbb46000002",
+    "parent": null,
+    "user": {
+      "id": "5262c92c349e253115000001",
+      "name": "daniel-taylor",
+      "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
+    },
+    "slug": "test-recipe",
+    "created": "2013-10-22T06:45:46.776Z",
+    "private": false,
+    "data": {
+      "agingDays": 14,
+      "agingTemp": 20,
+      "agingTempF": 68,
+      "author": "Anonymous Brewer",
+      "batchSize": 20,
+      "batchSizeGallons": 5.283440000000001,
+      "boilSize": 10,
+      "boilSizeGallons": 2.6417200000000003,
+      "bottlingPressure": 0,
+      "bottlingTemp": 0,
+      "bottlingTempF": 32,
+      "description": "Recipe description",
+      "fermentables": [
+        {
+          "name": "Extra pale extract",
+          "weight": 4,
+          "yield": 75,
+          "color": 2.5,
+          "late": false
+        }
+      ],
+      "ibuMethod": "tinseth",
+      "mash": null,
+      "mashEfficiency": 75,
+      "name": "Test Recipe",
+      "primaryDays": 14,
+      "primaryTemp": 20,
+      "primaryTempF": 68,
+      "secondaryDays": 0,
+      "secondaryTemp": 0,
+      "secondaryTempF": 32,
+      "servingSize": 0.355,
+      "servingSizeOz": 0.09378106,
+      "spices": [
+        {
+          "name": "Cascade hops",
+          "weight": 0.028349556839727483,
+          "aa": 4.5,
+          "use": "boil",
+          "time": 60,
+          "form": "pellet"
+        }
+      ],
+      "steepEfficiency": 50,
+      "steepTime": 20,
+      "style": null,
+      "tertiaryDays": 0,
+      "tertiaryTemp": 0,
+      "tertiaryTempF": 32,
+      "yeast": [
+        {
+          "name": "Wyeast 3052",
+          "type": "ale",
+          "form": "liquid",
+          "attenuation": 74
+        }
+      ]
+    }
+  }
+]
