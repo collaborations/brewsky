@@ -5,20 +5,23 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/* Recipe Instructions
+ * http://api.malt.io/#recipes-recipe-get
+ */
 
-public class RecipeDetail extends ActionBarActivity {
+public class RecipeInstructionsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_detail);
+        setContentView(R.layout.activity_recipe_instructions);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recipe_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_recipe_instructions, menu);
         return true;
     }
 

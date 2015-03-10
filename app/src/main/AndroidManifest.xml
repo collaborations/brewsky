@@ -22,14 +22,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RecipeDetail"
+            android:name=".RecipeDetailActivity"
             android:label="@string/title_activity_recipe_detail" >
         </activity>
         <activity
-            android:name=".RecipeInstructions"
+            android:name=".RecipeInstructionsActivity"
             android:label="@string/title_activity_recipe_instructions" >
         </activity>
-        <activity android:name=".RecipeList"
+        <activity android:name=".RecipeListActivity"
             android:label="@string/title_activity_recipe_list" >
         </activity>
     </application>

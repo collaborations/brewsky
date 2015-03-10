@@ -1,19 +1,29 @@
 package edu.uw.informatics.brewsky;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 
-public class RecipeList extends ActionBarActivity {
+/* List of available recipes
+ * http://api.malt.io/#anonymous-public-api-recipe-collection
+ */
+
+public class RecipeListActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
-        //RecipeListData -> data
-        //RecipeListAdapter topics_adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
+
+        // Load the recipes
+        // Change this to get recipes that are currently downloaded
+        ArrayList<Recipe> data = null;
+
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
     }
 
 
