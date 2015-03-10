@@ -5,12 +5,14 @@ package edu.uw.informatics.brewsky;
  */
 public class Recipe {
     private String name;
+    private String style;
 
     public Recipe(){
 
     }
 
-    public Recipe(String name){
+    public Recipe(String name, String style){
         this.name = name;
+        this.style = style;
     }
 }

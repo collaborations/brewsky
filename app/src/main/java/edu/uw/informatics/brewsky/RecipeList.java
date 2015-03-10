@@ -12,6 +12,8 @@ public class RecipeList extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
+        //RecipeListData -> data
+        //RecipeListAdapter topics_adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
     }
 
 
@@ -19,6 +21,9 @@ public class RecipeList extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
+
+        // Ability to sort recipes by their styles?
+
         return true;
     }
 
