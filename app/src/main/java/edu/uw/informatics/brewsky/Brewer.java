@@ -19,13 +19,6 @@ public class Brewer {
     private String name;
     private String image;
 
-    // This is in case there is no brewer for the Recipe
-    public Brewer(){
-        this.id = null;
-        this.name = "Anonymous Brewer";
-        this.image = null;
-    }
-
     public Brewer(Map<String, String> data){
         if(data.keySet().size() == 3) {
             this.id = data.get("id");

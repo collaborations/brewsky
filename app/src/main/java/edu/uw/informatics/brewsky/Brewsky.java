@@ -1,6 +1,7 @@
 package edu.uw.informatics.brewsky;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 
 /**
@@ -31,6 +32,11 @@ public class Brewsky extends Application {
 
     public Brewsky getApplication(){
         return this.instance;
+    }
+
+    public void loadRecipes(){
+        Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
+        startService(recipeDownloadService);
     }
 
 }

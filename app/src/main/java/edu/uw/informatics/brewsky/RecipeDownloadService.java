@@ -4,11 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.JsonReader;
 import android.util.Log;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,12 +27,15 @@ public class RecipeDownloadService extends IntentService {
         String url = getString(R.string.api_url);
 
         // Add any other parameters onto the URL
+        Log.i(getString(R.string.log_implement), "API URL Building");
+
         json = null;
 
         //Doing this now for testing
         url += "/v1/public/recipes?detail=true";
 
         // Check internet availability
+        Log.i(getString(R.string.log_implement), "Internet Availability?");
 
         try {
             URL downloadURL = new URL(url);
@@ -49,18 +49,17 @@ public class RecipeDownloadService extends IntentService {
 
     }
 
-    private void saveRecipe(){
+    private void processRecipe(){
         ArrayList<Recipe> recipes = new ArrayList<>();
-
-        /*
-        id
-        parent
-        user { }
-        slug
-        created
-        private
-        data
-         */
+        try {
+            json.beginArray();                                      //Array of Recipes
+            while(json.hasNext()) {
+                recipes.add(createRecipe());
+            }
+            json.endArray();                                        //Close array of Recipes
+        } catch (IOException e) {
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        }
     }
 
     private Brewer createBrewer(){
@@ -99,6 +98,42 @@ public class RecipeDownloadService extends IntentService {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
         }
         return fermentables;
+    }
+
+    private Recipe createRecipe(){
+        Map<String, String> data = new HashMap<>();
+        Brewer brewer = null;
+        ArrayList<Fermentable> fermentables = null;
+        ArrayList<Spice> spices = null;
+        ArrayList<Yeast> yeast = null;
+
+        try {
+            json.beginObject();
+            while(json.hasNext()) {
+                String name = json.nextName();
+                if(name.equals("user")){
+                    brewer = createBrewer();
+                } else if(name.equals("fermentables")){
+                    fermentables = createFermentables();
+                } else if(name.equals("spices")){
+                    spices = createSpices();
+                } else if(name.equals("yeast")){
+                    yeast = createYeast();
+                } else {
+                    String value = json.nextString();
+                    data.put(name, value);
+                }
+            }
+            json.endObject();
+        } catch (IOException e){
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        }
+        Recipe recipe = new Recipe(data);
+        recipe.setBrewer(brewer);
+        recipe.setFermentables(fermentables);
+        recipe.setSpices(spices);
+        recipe.setYeast(yeast);
+        return recipe;
     }
 
     private ArrayList<Spice> createSpices(){

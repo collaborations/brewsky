@@ -1,5 +1,6 @@
 package edu.uw.informatics.brewsky;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import java.util.Map;
@@ -22,13 +23,15 @@ public class Fermentable {
     private int yield;
     private double color;
     private boolean late;
+    private Resources r;
 
     public Fermentable(Map<String, String> data){
+        r = Resources.getSystem();
         this.name = data.get("name");
         this.weight = Integer.parseInt(data.get("weight"));
         this.yield = Integer.parseInt(data.get("yield"));
         this.color = Double.parseDouble(data.get("color"));
-        Log.i("", "NEED: Fermentable.late");
+        Log.i(r.getString(R.string.log_implement), "Fermentable: Late?");
 //        this.late = data.get("late")
     }
 
