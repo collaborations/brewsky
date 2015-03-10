@@ -9,14 +9,21 @@ import android.util.Log;
 public class Brewsky extends Application {
     private static Brewsky instance;
 
-    public Brewsky(){
+    private Brewsky(){
         instance = (Brewsky)getApplication();
+    }
+
+    public static Brewsky getInstance(){
+        if (instance == null){
+            instance = new Brewsky();
+        }
+        return instance;
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
-        Log.i("Brewsky", "Brewsky has been launched");
+        Log.i(getString(R.string.log_general), "Brewsky has been launched");
     }
 
     public Brewsky getApplication(){
