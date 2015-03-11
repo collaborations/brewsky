@@ -69,13 +69,10 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
-//        holder.abv.setText(recipe.getAbv());
-//        holder.brewTime.setText(recipe.getBrewTime());
+        holder.abv.setText(Double.toString(recipe.getABV()));
+        holder.brewTime.setText(Double.toString(recipe.getBrewDayDuration()));
 //        holder.rating.setText(recipe.getRating());
-//        holder.type.setText(recipe.getType());
-
-
-
+//        holder.type.setText(recipe.getStyle());
         return row;
     }
 

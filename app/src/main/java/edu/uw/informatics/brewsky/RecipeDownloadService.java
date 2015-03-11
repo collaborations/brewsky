@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -35,7 +36,8 @@ public class RecipeDownloadService extends IntentService {
         json = null;
 
         //Doing this now for testing
-        url += "/v1/public/recipes?detail=false";
+//        url += "/v1/public/recipes?detail=false";
+        url += "/v1/public/recipes?detail=true";
 
         // Check internet availability
         Log.i(getString(R.string.log_implement), "BAD RESPONSE CODE");
@@ -81,6 +83,10 @@ public class RecipeDownloadService extends IntentService {
         ArrayList<Fermentable> fermentables = new ArrayList<>();
         ArrayList<Spice> spices = new ArrayList<>();
         ArrayList<Yeast> yeast = new ArrayList<>();
+        ArrayList<Integer> color = new ArrayList<>();
+        Map<Double, String> timeline = new TreeMap<>();
+        Map<Double, String> timelineImperial = new TreeMap<>();
+
 
         try {
             while(json.hasNext()) {
@@ -106,36 +112,57 @@ public class RecipeDownloadService extends IntentService {
                                         json.beginArray();
                                         while(json.hasNext()){
                                             // In F/S/Y object
-                                            Map<String, String> temp = new HashMap<>();
-                                            json.beginObject();
-                                            while(json.hasNext()){
-                                                name = json.nextName();
-                                                String value = null;
-                                                switch(json.peek()){
-                                                    case NUMBER:
-                                                        value = Double.toString(json.nextDouble());
+                                            if(name.equals("colorRgb")){
+                                                while(json.hasNext()){
+                                                    color.add(json.nextInt());
+                                                }
+                                            } else if(name.equals("timeline") || name.equals("timelineImperial")){
+                                                boolean imperial = name.equals("timelineImperial");
+                                                while(json.hasNext()){
+                                                    json.beginArray();
+                                                    double time = json.nextDouble();
+                                                    String instructions = json.nextString();
+                                                    if(imperial){
+                                                        timelineImperial.put(time, instructions);
+                                                    } else {
+                                                        timeline.put(time, instructions);
+                                                    }
+                                                    json.endArray();
+                                                }
+                                            } else {
+                                                Map<String, String> temp = new HashMap<>();
+
+                                                json.beginObject();
+                                                while (json.hasNext()) {
+                                                    name = json.nextName();
+                                                    String value = null;
+                                                    switch (json.peek()) {
+                                                        case NUMBER:
+                                                            value = Double.toString(json.nextDouble());
+                                                            break;
+                                                        case STRING:
+                                                            value = json.nextString();
+                                                            break;
+                                                        case BOOLEAN:
+                                                            value = Boolean.toString(json.nextBoolean());
+                                                            break;
+                                                    }
+                                                    temp.put(name, value);
+                                                }
+                                                json.endObject();
+                                                switch (type) {
+                                                    case "fermentables":
+                                                        fermentables.add(new Fermentable(temp));
                                                         break;
-                                                    case STRING:
-                                                        value = json.nextString();
+                                                    case "spices":
+                                                        spices.add(new Spice(temp));
                                                         break;
-                                                    case BOOLEAN:
-                                                        value = Boolean.toString(json.nextBoolean());
+                                                    case "yeast":
+                                                        yeast.add(new Yeast(temp));
                                                         break;
                                                 }
-                                                temp.put(name, value);
                                             }
-                                            json.endObject();
-                                            switch (type){
-                                                case "fermentables":
-                                                    fermentables.add(new Fermentable(temp));
-                                                    break;
-                                                case "spices":
-                                                    spices.add(new Spice(temp));
-                                                    break;
-                                                case "yeast":
-                                                    yeast.add(new Yeast(temp));
-                                                    break;
-                                            }
+
                                         }
                                         // Leaving F/S/Y array
                                         json.endArray();
@@ -183,6 +210,8 @@ public class RecipeDownloadService extends IntentService {
         }
         Recipe recipe = new Recipe(data, context);
         recipe.setBrewer(brewer);
+        recipe.setColor(color);
+        recipe.setTimeline(timeline, timelineImperial);
         recipe.setFermentables(fermentables);
         recipe.setSpices(spices);
         recipe.setYeast(yeast);

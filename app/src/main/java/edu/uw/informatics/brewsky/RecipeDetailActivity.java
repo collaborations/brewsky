@@ -13,6 +13,8 @@ public class RecipeDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        Intent launchedMe = getIntent();
+        Recipe recipe = (Recipe) launchedMe.getSerializableExtra("recipe");
     }
 
 

@@ -5,6 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,17 @@ public class RecipeListActivity extends ActionBarActivity {
         ArrayList<Recipe> data = app.getRecipes();
 
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
+        final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
+        recipeList.setAdapter(recipeListAdapter);
+        recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent recipeDetails = new Intent(RecipeListActivity.this, RecipeDetailActivity.class);
+                Recipe clickedRecipe = (Recipe) recipeList.getItemAtPosition(position);
+                recipeDetails.putExtra("recipe", clickedRecipe);
+                startActivity(recipeDetails);
+            }
+        });
     }
 
     @Override
