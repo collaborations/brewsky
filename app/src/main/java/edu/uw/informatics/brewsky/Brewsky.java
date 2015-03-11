@@ -64,9 +64,11 @@ public class Brewsky
 
     /**
      * Adds an ArrayList of recipes.
-     * @param recipes
      */
     public void addRecipes(ArrayList<Recipe> recipes){
+        for(Recipe each : recipes){
+            Log.i(getString(R.string.log_general), each.toString());
+        }
         recipesList.addAll(recipes);
     }
 

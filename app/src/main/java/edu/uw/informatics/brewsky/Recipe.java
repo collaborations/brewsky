@@ -292,4 +292,7 @@ public class Recipe {
         return Double.parseDouble(data.get("tertiaryTemp"));
     }
 
+    public String toString(){
+        return this.name;
+    }
 }

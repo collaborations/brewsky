@@ -19,7 +19,7 @@
 
 
     <!-- API strings -->
-    <string name="api_url">https://api.malt.io</string>
+    <string name="api_url">http://api.malt.io</string>
 
 
 </resources>

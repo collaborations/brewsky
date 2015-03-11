@@ -3,6 +3,7 @@ package edu.uw.informatics.brewsky;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.Log;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,15 +42,15 @@ public class RecipeDownloadService extends IntentService {
             URL downloadURL = new URL(url);
             InputStreamReader inputStreamReader = new InputStreamReader(downloadURL.openStream());
             json = new JsonReader(inputStreamReader);
-
-            Log.i(getString(R.string.log_general), json.toString());
+            processRecipes();
+//            Log.i(getString(R.string.log_general), json.toString());
         } catch (Exception e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.onHandleIntent(): " + e.toString());
         }
 
     }
 
-    private void processRecipe(){
+    private void processRecipes(){
         ArrayList<Recipe> recipes = new ArrayList<>();
         try {
             json.beginArray();                                      //Array of Recipes
@@ -57,9 +58,11 @@ public class RecipeDownloadService extends IntentService {
                 recipes.add(createRecipe());
             }
             json.endArray();                                        //Close array of Recipes
-        } catch (IOException e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        } catch (Exception e) {
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.processRecipes(): " + e.toString());
         }
+        Brewsky brewsky = (Brewsky) getApplication();
+        brewsky.addRecipes(recipes);
     }
 
     private Brewer createBrewer(){
@@ -72,8 +75,9 @@ public class RecipeDownloadService extends IntentService {
             data.put(name, value);
           }
           json.endObject();
-        } catch (IOException e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        } catch (Exception e) {
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createBrewer(): " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), e.getMessage());
         }
         return new Brewer(data);
     }
@@ -96,6 +100,7 @@ public class RecipeDownloadService extends IntentService {
             json.endArray();
         } catch (IOException e) {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), e.getMessage());
         }
         return fermentables;
     }
@@ -111,29 +116,110 @@ public class RecipeDownloadService extends IntentService {
             json.beginObject();
             while(json.hasNext()) {
                 String name = json.nextName();
-                if(name.equals("user")){
-                    brewer = createBrewer();
-                } else if(name.equals("fermentables")){
-                    fermentables = createFermentables();
-                } else if(name.equals("spices")){
-                    spices = createSpices();
-                } else if(name.equals("yeast")){
-                    yeast = createYeast();
-                } else {
-                    String value = json.nextString();
-                    data.put(name, value);
+                JsonToken peek = json.peek();
+                switch (peek){
+                    case BEGIN_ARRAY:
+                        if(name.equals("fermentables")){
+                            fermentables = createFermentables();
+                        } else if(name.equals("spices")){
+                            spices = createSpices();
+                        } else if(name.equals("yeast")) {
+                            yeast = createYeast();
+                        } else {
+                            Log.wtf(getString(R.string.log_general), "Unknown array: " + name + "-->" + peek.toString());
+                        }
+                        break;
+                    case BEGIN_OBJECT:
+                        if(name.equals("user")) {
+                            brewer = createBrewer();
+                        } else if (name.equals("data")){
+                            
+                        }
+                        break;
+                    case BOOLEAN:
+                        String text = (json.nextBoolean()) ? "true" : "false";
+                        data.put(name, text);
+                        Log.i(getString(R.string.log_implement), "Detect Booleans");
+                        Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+                        break;
+                    case NULL:
+                        data.put(name, "NULL");
+                        Log.i(getString(R.string.log_implement), "Detect Null");
+                        json.nextNull();
+                        break;
+                    case NUMBER:
+                        Log.i(getString(R.string.log_implement), "Number Handling");
+                        break;
+                    case STRING:
+                        data.put(name, json.nextString());
+                        break;
+                    default:
+                        Log.wtf(getString(R.string.log_general), "Skipping value: " + name + " : " + peek.toString());
+                        json.skipValue();
+                        break;
                 }
+
             }
             json.endObject();
-        } catch (IOException e){
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        } catch (Exception e){
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createRecipe(): " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), e.getMessage());
         }
+
+
         Recipe recipe = new Recipe(data);
         recipe.setBrewer(brewer);
         recipe.setFermentables(fermentables);
         recipe.setSpices(spices);
         recipe.setYeast(yeast);
         return recipe;
+//        try {
+//            json.beginObject();
+//            while(json.hasNext()) {
+////                Log.i(getString(R.string.log_general), json.toString());
+//                String name = json.nextName();
+//                JsonToken peek = json.peek();
+//                Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+//                if(peek.equals(JsonToken.BEGIN_ARRAY)){
+//                    if(name.equals("fermentables")){
+//                        fermentables = createFermentables();
+//                    } else if(name.equals("spices")){
+//                        spices = createSpices();
+//                    } else if(name.equals("yeast")) {
+//                        yeast = createYeast();
+//                    } else {
+//                        Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+//                    }
+//                } else if(peek.equals(JsonToken.BEGIN_OBJECT)){
+//                    if(name.equals("user")){
+//                        brewer = createBrewer();
+//                    } else if(name.equals())) {
+//
+//                    } else {
+//                        Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+//                    }
+//                } else if(peek.equals(JsonToken.BOOLEAN)){
+//                    String text = (json.nextBoolean()) ? "true" : "false";
+//                    data.put(name, text);
+//                    Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+//                } else if(peek.equals(JsonToken.NUMBER)){
+//
+//                    Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+//                } else if(peek.equals(JsonToken.STRING)){
+//                    String value = json.nextString();
+//                    data.put(name, value);
+//                } else if(peek.equals(JsonToken.NULL)) {
+//                    json.nextNull();
+//                    data.put(name, "NULL");
+//                } else {
+//                    Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+//                }
+//            }
+//            json.endObject();
+//        } catch (Exception e){
+//            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createRecipe(): " + e.toString());
+//            Log.wtf(getString(R.string.log_wtf), e.getMessage());
+//        }
     }
 
     private ArrayList<Spice> createSpices(){
@@ -152,8 +238,9 @@ public class RecipeDownloadService extends IntentService {
                 spices.add(new Spice(spiceProperties));
             }
             json.endArray();
-        } catch (IOException e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        } catch (Exception e) {
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createSpices(): " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), e.getMessage());
         }
         return spices;
     }
@@ -178,8 +265,9 @@ public class RecipeDownloadService extends IntentService {
                 yeast.add(new Yeast(yeastProperties));
             }
             json.endArray();
-        } catch (IOException e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
+        } catch (Exception e) {
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createYeast(): " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), e.getMessage());
         }
         return yeast;
     }
