@@ -2,6 +2,7 @@ package edu.uw.informatics.brewsky;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Map;
 //    "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
 //}
 
-public class Brewer {
+public class Brewer implements Serializable {
     private String id;
     private String name;
     private String image;

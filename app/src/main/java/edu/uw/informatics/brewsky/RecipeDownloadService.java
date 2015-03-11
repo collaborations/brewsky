@@ -1,6 +1,7 @@
 package edu.uw.informatics.brewsky;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.util.JsonReader;
 import android.util.JsonToken;
@@ -18,12 +19,14 @@ import java.util.Map;
 public class RecipeDownloadService extends IntentService {
     public static final String TAG = IntentService.class.getSimpleName();
     private JsonReader json;
+    private Context context;
 
     public RecipeDownloadService(){
         super(TAG);
     }
 
     public void onHandleIntent(Intent intent){
+        context = getApplicationContext();
         String url = getString(R.string.api_url);
 
         // Add any other parameters onto the URL
@@ -35,7 +38,8 @@ public class RecipeDownloadService extends IntentService {
         url += "/v1/public/recipes?detail=false";
 
         // Check internet availability
-        Log.i(getString(R.string.log_implement), "Internet Availability?");
+        Log.i(getString(R.string.log_implement), "BAD RESPONSE CODE");
+        Log.i(getString(R.string.log_implement), "INTERNET CONNECTIVITY");
 
         try {
             URL downloadURL = new URL(url);
@@ -51,8 +55,6 @@ public class RecipeDownloadService extends IntentService {
 
     private void processRecipes(){
         ArrayList<Recipe> recipes = new ArrayList<>();
-        Log.i(getString(R.string.log_implement), "BAD RESPONSE CODE");
-        Log.i(getString(R.string.log_implement), "INTERNET CONNECTIVITY");
         try {
             //Array of recipes
             json.beginArray();
@@ -179,7 +181,7 @@ public class RecipeDownloadService extends IntentService {
         } catch (IOException e) {
             Log.wtf(getString(R.string.log_wtf), "Exception in parseObject: " + e.getMessage());
         }
-        Recipe recipe = new Recipe(data);
+        Recipe recipe = new Recipe(data, context);
         recipe.setBrewer(brewer);
         recipe.setFermentables(fermentables);
         recipe.setSpices(spices);

@@ -1,5 +1,6 @@
 package edu.uw.informatics.brewsky;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Map;
 //}
 
 
-public class Yeast {
+public class Yeast implements Serializable {
     private String name;
     private String type;
     private String form;

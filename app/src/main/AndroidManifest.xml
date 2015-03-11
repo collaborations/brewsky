@@ -43,6 +43,10 @@
         <!-- Services -->
         <service android:name=".RecipeDownloadService" />
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

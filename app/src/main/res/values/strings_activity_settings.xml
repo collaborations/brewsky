@@ -1,0 +1,13 @@
+<resources>
+    <!-- Strings related to Settings -->
+
+    <!-- General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="measurement_scale">Measurement Scale</string>
+    <string name="temperature_scale">Temperature Scale</string>
+
+    <!-- Settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_title_push_notifications">Allow push notifications</string>
+
+</resources>

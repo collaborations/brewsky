@@ -11,6 +11,8 @@ public interface RecipeRepository {
     public void addRecipe(Recipe recipe);
     public void addRecipes(ArrayList<Recipe> recipes);
     public ArrayList<Recipe> getRecipes();
+    public int getRecipeCount();
+    public void loadRecipes();
 //    public ArrayList<Recipe> getSortedRecipes(String sortBy, boolean ascending);
 //    public ArrayList<Recipe> getFilteredRecipes(String filterBy);
 //    public ArrayList<Recipe> getFilteredRecipes(ArrayList<String> filterBy);

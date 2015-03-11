@@ -11,14 +11,13 @@
     <!-- Application strings -->
     <string name="hello_world">Hello world!</string>
     <string name="no_recipe_desc">No description for this recipe</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Activity title strings -->
+    <string name="title_activity_favorites">Favorites Activity</string>
     <string name="title_activity_recipe_detail">Recipe Details</string>
     <string name="title_activity_recipe_instructions">Instructions</string>
     <string name="title_activity_recipe_list">Recipe List</string>
-    <string name="title_activity_favorites">FavoritesActivity</string>
-
+    <string name="title_activity_settings">Settings</string>
 
     <!-- API strings -->
     <string name="api_url">http://api.malt.io</string>
