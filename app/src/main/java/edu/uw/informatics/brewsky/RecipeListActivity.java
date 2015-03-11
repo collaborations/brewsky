@@ -26,7 +26,7 @@ public class RecipeListActivity extends ActionBarActivity {
         // Load the recipes
         Brewsky app = (Brewsky) getApplication();
         ArrayList<Recipe> data = app.getRecipes();
-        Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
+        // Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
         recipeList.setAdapter(recipeListAdapter);

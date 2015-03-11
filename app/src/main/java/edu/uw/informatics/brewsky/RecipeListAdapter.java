@@ -38,6 +38,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        Log.i("RecipeListAdapter", "In list view");
         View row = convertView;
         RecipeListHolder holder = null;
 
