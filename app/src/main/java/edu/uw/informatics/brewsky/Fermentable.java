@@ -19,31 +19,28 @@ import java.util.Map;
 
 public class Fermentable {
     private String name;
-    private int weight;
-    private int yield;
+    private double weight;
+    private double yield;
     private double color;
     private boolean late;
-    private Resources r;
 
     public Fermentable(Map<String, String> data){
-        r = Resources.getSystem();
         this.name = data.get("name");
-        this.weight = Integer.parseInt(data.get("weight"));
-        this.yield = Integer.parseInt(data.get("yield"));
+        this.weight = Double.parseDouble(data.get("weight"));
+        this.yield = Double.parseDouble(data.get("yield"));
         this.color = Double.parseDouble(data.get("color"));
-        Log.i(r.getString(R.string.log_implement), "Fermentable: Late?");
-//        this.late = data.get("late")
+        this.late = Boolean.parseBoolean(data.get("late"));
     }
 
     public String getName(){
         return this.name;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public int getYield() {
+    public double getYield() {
         return yield;
     }
 

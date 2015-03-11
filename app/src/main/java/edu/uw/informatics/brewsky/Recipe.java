@@ -1,6 +1,5 @@
 package edu.uw.informatics.brewsky;
 
-import android.content.res.Resources;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -25,20 +24,19 @@ public class Recipe {
     private ArrayList<Fermentable> fermentables;
     private ArrayList<Spice> spices;
     private ArrayList<Yeast> yeast;
-    private Resources r;
+    private R r;
     private Map<String, String> data;
 
     public Recipe(Map<String, String> data){
         this.data = data;
-        r = Resources.getSystem();
         this.created = data.remove("created");
         String description = data.remove("description");
-        this.desc = (description.equals("")) ? description : r.getString(R.string.no_recipe_desc) ;
+        this.desc = (description.equals("")) ? description : "No Description" ;
         this.id = data.remove("id");
         this.name = data.remove("name");
         this.slug = data.remove("slug");
-        Log.i(r.getString(R.string.log_implement), "isPrivate");
-        Log.i(r.getString(R.string.log_implement), "Style");
+        Log.i("BrewskyImplement", "isPrivate");
+        Log.i("BrewskyImplement", "Style");
     }
 
     /**
@@ -120,7 +118,7 @@ public class Recipe {
      */
     //    "agingTemp": 20,
     public int getAgingTemp(){
-        Log.i(r.getString(R.string.log_implement), "C/F based on settings");
+        Log.i("BrewskyImplement", "C/F based on settings");
         return Integer.parseInt(data.get("agingTemp"));
     }
 
@@ -132,7 +130,7 @@ public class Recipe {
     //    "batchSize": 20,
     //    "batchSizeGallons": 5.283440000000001,
     public double getBatchSize(){
-        Log.i(r.getString(R.string.log_implement), "Batch size based on units");
+        Log.i("BrewskyImplement", "Batch size based on units");
         return Double.parseDouble(data.get("batchSize"));
     }
 
@@ -144,7 +142,7 @@ public class Recipe {
     //    "boilSize": 10,
     //    "boilSizeGallons": 2.6417200000000003,
     public double getBoilSize(){
-        Log.i(r.getString(R.string.log_implement), "Boil size based on units");
+        Log.i("BrewskyImplement", "Boil size based on units");
         return Double.parseDouble(data.get("boilSize"));
     }
 
@@ -164,7 +162,7 @@ public class Recipe {
     //    "bottlingTemp": 23,
     //    "bottlingTempF": 73.4,
     public double getBottlingTemp(){
-        Log.i(r.getString(R.string.log_implement), "C/F based on settings");
+        Log.i("BrewskyImplement", "C/F based on settings");
         return Double.parseDouble(data.get("bottlingTemp"));
     }
 
@@ -183,7 +181,7 @@ public class Recipe {
      */
     //    "mash": null,
     public String getMash(){
-        Log.i(r.getString(R.string.log_implement), "Mash?");
+        Log.i("BrewskyImplement", "Mash?");
         return data.get("mash");
     }
 
@@ -211,7 +209,7 @@ public class Recipe {
     //    "primaryTemp": 20,
     //    "primaryTempF": 68,
     public double getPrimaryTemp(){
-        Log.i(r.getString(R.string.log_implement), "C/F based on settings");
+        Log.i("BrewskyImplement", "C/F based on settings");
         return Double.parseDouble(data.get("primaryTemp"));
     }
 
@@ -231,7 +229,7 @@ public class Recipe {
     //    "secondaryTemp": 0,
     //    "secondaryTempF": 32,
     public double getSecondaryTemp(){
-        Log.i(r.getString(R.string.log_implement), "C/F based on settings");
+        Log.i("BrewskyImplement", "C/F based on settings");
         return Double.parseDouble(data.get("secondaryTemp"));
     }
 
@@ -288,7 +286,7 @@ public class Recipe {
     //    "tertiaryTemp": 0,
     //    "tertiaryTempF": 32,
     public double getTertiaryTemp(){
-        Log.i(r.getString(R.string.log_implement), "C/F based on settings");
+        Log.i("BrewskyImplement", "C/F based on settings");
         return Double.parseDouble(data.get("tertiaryTemp"));
     }
 

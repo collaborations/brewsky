@@ -18,13 +18,13 @@ public class Yeast {
     private String name;
     private String type;
     private String form;
-    private int attenuation;
+    private double attenuation;
 
     public Yeast(Map<String, String> data){
         this.name = data.get("name");
         this.type = data.get("type");
         this.form = data.get("form");
-        this.attenuation = Integer.parseInt(data.get("attenuation"));
+        this.attenuation = Double.parseDouble(data.get("attenuation"));
     }
 
     public String getName() {
@@ -39,7 +39,7 @@ public class Yeast {
         return form;
     }
 
-    public int getAttenuation() {
+    public double getAttenuation() {
         return attenuation;
     }
 

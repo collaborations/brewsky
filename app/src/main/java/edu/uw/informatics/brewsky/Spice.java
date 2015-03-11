@@ -18,17 +18,17 @@ import java.util.Map;
 public class Spice {
     private String name;
     private double weight;
-    private int aa;
+    private double aa;
     private String use;
-    private int time;
+    private double time;
     private String form;
 
     public Spice(Map<String, String> data){
         this.name = data.get("name");
         this.weight = Double.parseDouble(data.get("weight"));
-        this.aa = Integer.parseInt(data.get("aa"));
+        this.aa = Double.parseDouble(data.get("aa"));
         this.use = data.get("use");
-        this.time = Integer.parseInt(data.get("time"));
+        this.time = Double.parseDouble(data.get("time"));
         this.form = data.get("form");
     }
 
@@ -40,7 +40,7 @@ public class Spice {
         return this.weight;
     }
 
-    public int getAA(){
+    public double getAA(){
         return this.aa;
     }
 
@@ -48,7 +48,7 @@ public class Spice {
         return this.use;
     }
 
-    public int getTime(){
+    public double getTime(){
         return this.time;
     }
 

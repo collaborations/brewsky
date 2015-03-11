@@ -19,7 +19,6 @@ public class RecipeDownloadService extends IntentService {
     public static final String TAG = IntentService.class.getSimpleName();
     private JsonReader json;
 
-
     public RecipeDownloadService(){
         super(TAG);
     }
@@ -33,7 +32,7 @@ public class RecipeDownloadService extends IntentService {
         json = null;
 
         //Doing this now for testing
-        url += "/v1/public/recipes?detail=true";
+        url += "/v1/public/recipes?detail=false";
 
         // Check internet availability
         Log.i(getString(R.string.log_implement), "Internet Availability?");
@@ -44,7 +43,7 @@ public class RecipeDownloadService extends IntentService {
             json = new JsonReader(inputStreamReader);
             processRecipes();
 //            Log.i(getString(R.string.log_general), json.toString());
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.onHandleIntent(): " + e.toString());
         }
 
@@ -52,103 +51,121 @@ public class RecipeDownloadService extends IntentService {
 
     private void processRecipes(){
         ArrayList<Recipe> recipes = new ArrayList<>();
+        Log.i(getString(R.string.log_implement), "BAD RESPONSE CODE");
+        Log.i(getString(R.string.log_implement), "INTERNET CONNECTIVITY");
         try {
-            json.beginArray();                                      //Array of Recipes
+            //Array of recipes
+            json.beginArray();
             while(json.hasNext()) {
-                recipes.add(createRecipe());
+                // While there are recipes
+                json.beginObject();
+                recipes.add(parseRecipe());
+                json.endObject();
             }
-            json.endArray();                                        //Close array of Recipes
-        } catch (Exception e) {
+            //Close array of recipes
+            json.endArray();
+        } catch (IOException e) {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.processRecipes(): " + e.toString());
         }
         Brewsky brewsky = (Brewsky) getApplication();
         brewsky.addRecipes(recipes);
     }
 
-    private Brewer createBrewer(){
-        Map<String, String> data = new HashMap<>();
-        try {
-          json.beginObject();
-          while(json.hasNext()){
-            String name = json.nextName();
-            String value = json.nextString();
-            data.put(name, value);
-          }
-          json.endObject();
-        } catch (Exception e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createBrewer(): " + e.toString());
-            Log.wtf(getString(R.string.log_wtf), e.getMessage());
-        }
-        return new Brewer(data);
-    }
-
-    private ArrayList<Fermentable> createFermentables(){
-        ArrayList<Fermentable> fermentables = new ArrayList<>();
-        try {
-            json.beginArray();
-            while(json.hasNext()) {                                                 //Loop over array of fermentables
-                json.beginObject();
-                Map<String, String> fermentableProperties = new HashMap<String, String>();
-                while (json.hasNext()) {                                            //Loop over fermentable properties
-                    String name = json.nextName();
-                    String value = json.nextString();
-                    fermentableProperties.put(name, value);
-                }
-                json.endObject();
-                fermentables.add(new Fermentable(fermentableProperties));
-            }
-            json.endArray();
-        } catch (IOException e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService: " + e.toString());
-            Log.wtf(getString(R.string.log_wtf), e.getMessage());
-        }
-        return fermentables;
-    }
-
-    private Recipe createRecipe(){
+    private Recipe parseRecipe(){
         Map<String, String> data = new HashMap<>();
         Brewer brewer = null;
-        ArrayList<Fermentable> fermentables = null;
-        ArrayList<Spice> spices = null;
-        ArrayList<Yeast> yeast = null;
+
+        // Fermentables, spices, and yeast ArrayLists, now on referred to as F/S/Y
+        ArrayList<Fermentable> fermentables = new ArrayList<>();
+        ArrayList<Spice> spices = new ArrayList<>();
+        ArrayList<Yeast> yeast = new ArrayList<>();
 
         try {
-            json.beginObject();
             while(json.hasNext()) {
                 String name = json.nextName();
                 JsonToken peek = json.peek();
-                switch (peek){
+                switch (json.peek()) {
                     case BEGIN_ARRAY:
-                        if(name.equals("fermentables")){
-                            fermentables = createFermentables();
-                        } else if(name.equals("spices")){
-                            spices = createSpices();
-                        } else if(name.equals("yeast")) {
-                            yeast = createYeast();
-                        } else {
-                            Log.wtf(getString(R.string.log_general), "Unknown array: " + name + "-->" + peek.toString());
-                        }
+                        // This should never happen
                         break;
                     case BEGIN_OBJECT:
-                        if(name.equals("user")) {
+                        if(name.equals("user")){
                             brewer = createBrewer();
-                        } else if (name.equals("data")){
-                            
+                        } else if(name.equals("data")){
+                            // Inside data object
+                            json.beginObject();
+                            while(json.hasNext()){
+                                name = json.nextName();
+                                peek = json.peek();
+                                switch (peek){
+                                    case BEGIN_ARRAY:
+                                        // Inside F/S/Y array
+                                        String type = name;
+                                        json.beginArray();
+                                        while(json.hasNext()){
+                                            // In F/S/Y object
+                                            Map<String, String> temp = new HashMap<>();
+                                            json.beginObject();
+                                            while(json.hasNext()){
+                                                name = json.nextName();
+                                                String value = null;
+                                                switch(json.peek()){
+                                                    case NUMBER:
+                                                        value = Double.toString(json.nextDouble());
+                                                        break;
+                                                    case STRING:
+                                                        value = json.nextString();
+                                                        break;
+                                                    case BOOLEAN:
+                                                        value = Boolean.toString(json.nextBoolean());
+                                                        break;
+                                                }
+                                                temp.put(name, value);
+                                            }
+                                            json.endObject();
+                                            switch (type){
+                                                case "fermentables":
+                                                    fermentables.add(new Fermentable(temp));
+                                                    break;
+                                                case "spices":
+                                                    spices.add(new Spice(temp));
+                                                    break;
+                                                case "yeast":
+                                                    yeast.add(new Yeast(temp));
+                                                    break;
+                                            }
+                                        }
+                                        // Leaving F/S/Y array
+                                        json.endArray();
+                                        break;
+                                    case BOOLEAN:
+                                        data.put(name, Boolean.toString(json.nextBoolean()));
+                                        break;
+                                    case STRING:
+                                        data.put(name, json.nextString());
+                                        break;
+                                    case NUMBER:
+                                        data.put(name, Double.toString(json.nextDouble()));
+                                        break;
+                                    case NULL:
+                                        data.put(name, "NULL");
+                                        json.nextNull();
+                                        break;
+                                }
+                            }
+                            // Exiting data object
+                            json.endObject();
                         }
                         break;
                     case BOOLEAN:
-                        String text = (json.nextBoolean()) ? "true" : "false";
-                        data.put(name, text);
-                        Log.i(getString(R.string.log_implement), "Detect Booleans");
-                        Log.i(getString(R.string.log_general), name + " : " + peek.toString());
+                        data.put(name, Boolean.toString(json.nextBoolean()));
                         break;
                     case NULL:
                         data.put(name, "NULL");
-                        Log.i(getString(R.string.log_implement), "Detect Null");
                         json.nextNull();
                         break;
                     case NUMBER:
-                        Log.i(getString(R.string.log_implement), "Number Handling");
+                        // Should never happen
                         break;
                     case STRING:
                         data.put(name, json.nextString());
@@ -158,118 +175,35 @@ public class RecipeDownloadService extends IntentService {
                         json.skipValue();
                         break;
                 }
-
             }
-            json.endObject();
-        } catch (Exception e){
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createRecipe(): " + e.toString());
-            Log.wtf(getString(R.string.log_wtf), e.getMessage());
+        } catch (IOException e) {
+            Log.wtf(getString(R.string.log_wtf), "Exception in parseObject: " + e.getMessage());
         }
-
-
         Recipe recipe = new Recipe(data);
         recipe.setBrewer(brewer);
         recipe.setFermentables(fermentables);
         recipe.setSpices(spices);
         recipe.setYeast(yeast);
         return recipe;
-//        try {
-//            json.beginObject();
-//            while(json.hasNext()) {
-////                Log.i(getString(R.string.log_general), json.toString());
-//                String name = json.nextName();
-//                JsonToken peek = json.peek();
-//                Log.i(getString(R.string.log_general), name + " : " + peek.toString());
-//                if(peek.equals(JsonToken.BEGIN_ARRAY)){
-//                    if(name.equals("fermentables")){
-//                        fermentables = createFermentables();
-//                    } else if(name.equals("spices")){
-//                        spices = createSpices();
-//                    } else if(name.equals("yeast")) {
-//                        yeast = createYeast();
-//                    } else {
-//                        Log.i(getString(R.string.log_general), name + " : " + peek.toString());
-//                    }
-//                } else if(peek.equals(JsonToken.BEGIN_OBJECT)){
-//                    if(name.equals("user")){
-//                        brewer = createBrewer();
-//                    } else if(name.equals())) {
-//
-//                    } else {
-//                        Log.i(getString(R.string.log_general), name + " : " + peek.toString());
-//                    }
-//                } else if(peek.equals(JsonToken.BOOLEAN)){
-//                    String text = (json.nextBoolean()) ? "true" : "false";
-//                    data.put(name, text);
-//                    Log.i(getString(R.string.log_general), name + " : " + peek.toString());
-//                } else if(peek.equals(JsonToken.NUMBER)){
-//
-//                    Log.i(getString(R.string.log_general), name + " : " + peek.toString());
-//                } else if(peek.equals(JsonToken.STRING)){
-//                    String value = json.nextString();
-//                    data.put(name, value);
-//                } else if(peek.equals(JsonToken.NULL)) {
-//                    json.nextNull();
-//                    data.put(name, "NULL");
-//                } else {
-//                    Log.i(getString(R.string.log_general), name + " : " + peek.toString());
-//                }
-//            }
-//            json.endObject();
-//        } catch (Exception e){
-//            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createRecipe(): " + e.toString());
-//            Log.wtf(getString(R.string.log_wtf), e.getMessage());
-//        }
     }
 
-    private ArrayList<Spice> createSpices(){
-        ArrayList<Spice> spices = new ArrayList<>();
+    private Brewer createBrewer(){
+        Map<String, String> data = new HashMap<>();
         try {
-            json.beginArray();
-            while(json.hasNext()) {                                                 //Loop over array of spices
-                json.beginObject();
-                Map<String, String> spiceProperties = new HashMap<String, String>();
-                while (json.hasNext()) {                                            //Loop over spice properties
-                    String name = json.nextName();
-                    String value = json.nextString();
-                    spiceProperties.put(name, value);
-                }
-                json.endObject();
-                spices.add(new Spice(spiceProperties));
+            json.beginObject();
+            while(json.hasNext()){
+                String name = json.nextName();
+                String value = json.nextString();
+                data.put(name, value);
             }
-            json.endArray();
+            json.endObject();
         } catch (Exception e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createSpices(): " + e.toString());
+            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createBrewer(): " + e.toString());
             Log.wtf(getString(R.string.log_wtf), e.getMessage());
         }
-        return spices;
+        return new Brewer(data);
     }
 
-    /**
-     * Assuming the next item in the JsonReader is a Yeast object, it returns an ArrayList of
-     * @return
-     */
-    private ArrayList<Yeast> createYeast(){
-        ArrayList<Yeast> yeast = new ArrayList<>();
-        try {
-            json.beginArray();
-            while(json.hasNext()) {                                                 //Loop over array of spices
-                json.beginObject();
-                Map<String, String> yeastProperties = new HashMap<String, String>();
-                while (json.hasNext()) {                                            //Loop over spice properties
-                    String name = json.nextName();
-                    String value = json.nextString();
-                    yeastProperties.put(name, value);
-                }
-                json.endObject();
-                yeast.add(new Yeast(yeastProperties));
-            }
-            json.endArray();
-        } catch (Exception e) {
-            Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.createYeast(): " + e.toString());
-            Log.wtf(getString(R.string.log_wtf), e.getMessage());
-        }
-        return yeast;
-    }
+
 
 }
