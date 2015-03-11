@@ -1,10 +1,13 @@
 package edu.uw.informatics.brewsky;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -52,10 +55,6 @@ public class Brewsky
         }
     }
 
-    /*
-     * Methods to implement the RecipeRepository
-     */
-
     // Adds a single given recipe to the repository.
     public void addRecipe(Recipe recipe){
         recipesList.add(recipe);
@@ -78,4 +77,5 @@ public class Brewsky
     public int getRecipeCount(){
         return recipesList.size();
     }
+
 }

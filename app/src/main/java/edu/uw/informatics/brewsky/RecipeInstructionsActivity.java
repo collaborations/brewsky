@@ -6,16 +6,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Map;
+
 /* Recipe Instructions
  * http://api.malt.io/#recipes-recipe-get
  */
 
 public class RecipeInstructionsActivity extends ActionBarActivity {
+    Intent parent;
+    Recipe recipe;
+    Map<Double, String> instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_instructions);
+        Intent parent = getIntent();
+        recipe = (Recipe) parent.getSerializableExtra("recipe");
+        instructions = recipe.getTimeline();
+
     }
 
     @Override

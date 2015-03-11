@@ -34,6 +34,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         this.data = data;
         this.layoutResourceId = resource;
 
+
     }
 
     @Override
