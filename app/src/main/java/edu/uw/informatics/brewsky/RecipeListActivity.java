@@ -3,6 +3,7 @@ package edu.uw.informatics.brewsky;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,7 @@ public class RecipeListActivity extends ActionBarActivity {
         // Load the recipes
         Brewsky app = (Brewsky) getApplication();
         ArrayList<Recipe> data = app.getRecipes();
-
+        Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
         recipeList.setAdapter(recipeListAdapter);
