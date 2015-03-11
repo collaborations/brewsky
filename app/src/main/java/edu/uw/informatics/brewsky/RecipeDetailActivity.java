@@ -31,7 +31,7 @@ public class RecipeDetailActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.favorites_button) {
+        if (id == R.id.favorites_menu_button) {
             // TODO: launch favorites activity
             Intent favoritesIntent = new Intent(RecipeDetailActivity.this, FavoritesActivity.class);
             startActivity(favoritesIntent);

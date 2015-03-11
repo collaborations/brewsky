@@ -66,14 +66,14 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         holder.rating.setImageResource(R.drawable.three_star);
         holder.type.setImageResource(R.drawable.amber_ale);
 
-        /*
+
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
-        holder.abv.setText(recipe.getAbv());
-        holder.brewTime.setText(recipe.getBrewTime());
-        holder.rating.setText(recipe.getRating());
-        holder.type.setText(recipe.getType());
-*/
+//        holder.abv.setText(recipe.getAbv());
+//        holder.brewTime.setText(recipe.getBrewTime());
+//        holder.rating.setText(recipe.getRating());
+//        holder.type.setText(recipe.getType());
+
 
 
         return row;

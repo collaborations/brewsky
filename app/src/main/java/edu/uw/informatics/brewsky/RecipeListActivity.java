@@ -20,8 +20,8 @@ public class RecipeListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_recipe_list);
 
         // Load the recipes
-        // Change this to get recipes that are currently downloaded
-        ArrayList<Recipe> data = null;
+        Brewsky app = (Brewsky) getApplication();
+        ArrayList<Recipe> data = app.getRecipes();
 
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
     }
@@ -29,7 +29,7 @@ public class RecipeListActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_favorites, menu);
+        getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
         return true;
     }
 
@@ -41,8 +41,10 @@ public class RecipeListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.favorites_button) {
-            // TODO: launch favorites activity
+        if(id == R.id.settings_menu_button){
+            Intent settingsIntent = new Intent(RecipeListActivity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
+        } else if (id == R.id.favorites_menu_button) {
             Intent favoritesIntent = new Intent(RecipeListActivity.this, FavoritesActivity.class);
             startActivity(favoritesIntent);
         }

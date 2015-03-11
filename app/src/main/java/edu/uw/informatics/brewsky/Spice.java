@@ -1,5 +1,6 @@
 package edu.uw.informatics.brewsky;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
 //        "form": "pellet"
 //    }
 
-public class Spice {
+public class Spice  implements Serializable {
     private String name;
     private double weight;
     private double aa;

@@ -1,7 +1,10 @@
 package edu.uw.informatics.brewsky;
-
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -12,22 +15,26 @@ import java.util.Map;
  * data map, mainly minor properties, I have also commented above how they are stored in the map
  * with an example. This is separate from the Javadoc comments and will be removed later.
  */
-public class Recipe {
+public class Recipe implements Serializable {
     private Brewer brewer;
     private String created;
     private String desc;
     private String id;
     private String name;
-//    private boolean isPrivate;
+    private boolean isPrivate;
     private String slug;
-//    private String style;
+    private String style;
     private ArrayList<Fermentable> fermentables;
     private ArrayList<Spice> spices;
     private ArrayList<Yeast> yeast;
-    private R r;
     private Map<String, String> data;
+    private Context context;
+    SharedPreferences prefs;
 
-    public Recipe(Map<String, String> data){
+    public Recipe(Map<String, String> data, Context context){
+        this.context = context;
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         this.data = data;
         this.created = data.remove("created");
         String description = data.remove("description");
@@ -35,8 +42,49 @@ public class Recipe {
         this.id = data.remove("id");
         this.name = data.remove("name");
         this.slug = data.remove("slug");
-        Log.i("BrewskyImplement", "isPrivate");
-        Log.i("BrewskyImplement", "Style");
+        this.style = data.remove("style");
+        this.isPrivate = Boolean.parseBoolean("private");
+    }
+
+    /**
+     * Returns the name of the recipe
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the recipe's ID
+     * @return
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Returns the recipe's descriptions
+     * @return
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    /**
+     * Returns the creation date of the recipe
+     * @return
+     */
+    public String getCreated() {
+        Log.i("BrewskyImplement", "CREATION DATE OBJECT");
+        return created;
+    }
+
+    /**
+     * Returns the slug for the recipe
+     * @return
+     */
+    public String getSlug() {
+        return slug;
     }
 
     /**
@@ -107,7 +155,6 @@ public class Recipe {
      * Return the number of days for aging
      * @return
      */
-    //    "agingDays": 14,
     public int getAgingDays(){
         return Integer.parseInt(data.get("agingDays"));
     }
@@ -116,10 +163,8 @@ public class Recipe {
      * Returns aging temperature based on preferences
      * @return
      */
-    //    "agingTemp": 20,
     public int getAgingTemp(){
-        Log.i("BrewskyImplement", "C/F based on settings");
-        return Integer.parseInt(data.get("agingTemp"));
+        return Integer.parseInt(data.get((isFahrenheit()) ? "agingTempF" : "agingTemp"));
     }
 
     /**
@@ -127,11 +172,9 @@ public class Recipe {
      * Units are based on user settings.
      * @return
      */
-    //    "batchSize": 20,
-    //    "batchSizeGallons": 5.283440000000001,
     public double getBatchSize(){
         Log.i("BrewskyImplement", "Batch size based on units");
-        return Double.parseDouble(data.get("batchSize"));
+        return Double.parseDouble(data.get((isStandard()) ? "batchSizeGallons" : "batchSize"));
     }
 
     /**
@@ -139,18 +182,15 @@ public class Recipe {
      * Units are based on user settings.
      * @return
      */
-    //    "boilSize": 10,
-    //    "boilSizeGallons": 2.6417200000000003,
     public double getBoilSize(){
         Log.i("BrewskyImplement", "Boil size based on units");
-        return Double.parseDouble(data.get("boilSize"));
+        return Double.parseDouble(data.get((isStandard()) ? "boilSizeGallons" : "boilSize"));
     }
 
     /**
      * Returns the bottling pressure
      * @return
      */
-    //    "bottlingPressure": 2.5,
     public double getBottlingPressure(){
         return Double.parseDouble(data.get("bottlingPressure"));
     }
@@ -159,11 +199,8 @@ public class Recipe {
      * Returns bottling temperature based on preferences
      * @return
      */
-    //    "bottlingTemp": 23,
-    //    "bottlingTempF": 73.4,
     public double getBottlingTemp(){
-        Log.i("BrewskyImplement", "C/F based on settings");
-        return Double.parseDouble(data.get("bottlingTemp"));
+        return Double.parseDouble(data.get((isFahrenheit()) ? "bottlingTemp" : "bottlingTempF"));
     }
 
     /**
@@ -188,7 +225,6 @@ public class Recipe {
     /**
      * Returns the mash efficiency
      */
-    //    "mashEfficiency": 75,
     public int getMashEfficiency(){
         return Integer.parseInt(data.get("mashEfficiency"));
     }
@@ -197,7 +233,6 @@ public class Recipe {
      * Returns the number of days in the primary fermenter
      * @return
      */
-    //    "primaryDays": 14,
     public int getPrimaryDays(){
         return Integer.parseInt(data.get("primaryDays"));
     }
@@ -206,18 +241,14 @@ public class Recipe {
      * Returns the primary fermentation temperature
      * @return
      */
-    //    "primaryTemp": 20,
-    //    "primaryTempF": 68,
     public double getPrimaryTemp(){
-        Log.i("BrewskyImplement", "C/F based on settings");
-        return Double.parseDouble(data.get("primaryTemp"));
+        return Double.parseDouble(data.get((isFahrenheit()) ? "primaryTempF" : "primaryTemp"));
     }
 
     /**
      * Returns the number of days in the secondary fermenter
      * @return
      */
-    //    "secondaryDays": 0,
     public int getSecondaryDays(){
         return Integer.parseInt(data.get("secondaryDays"));
     }
@@ -226,28 +257,23 @@ public class Recipe {
      * Returns the secondary fermentation temperature
      * @return
      */
-    //    "secondaryTemp": 0,
-    //    "secondaryTempF": 32,
     public double getSecondaryTemp(){
-        Log.i("BrewskyImplement", "C/F based on settings");
-        return Double.parseDouble(data.get("secondaryTemp"));
+        return Double.parseDouble(data.get((isFahrenheit()) ? "secondaryTempF" : "secondaryTemp"));
     }
 
     /**
      * Returns the serving size
      * @return
      */
-    //    "servingSize": 0.355,
-    //    "servingSizeOz": 0.09378106,
     public double getServingSize(){
-        return Double.parseDouble(data.get("servingSize"));
+        Log.i("BrewskyImplement", "STANDARD VS METRIC");
+        return Double.parseDouble(data.get((isStandard()) ? "servingSizeOz" : "servingSize"));
     }
 
     /**
      * Returns the steep efficiency
      * @return
      */
-    //    "steepEfficiency": 50,
     public int getSteepEfficiency(){
         return Integer.parseInt(data.get("steepEfficiency"));
     }
@@ -256,7 +282,6 @@ public class Recipe {
      * Returns the steep time
      * @return
      */
-    //    "steepTime": 20,
     public double getSteepTime(){
         return Double.parseDouble(data.get("steepTime"));
     }
@@ -265,16 +290,14 @@ public class Recipe {
      * Returns the style of the beer
      * @return
      */
-    //    "style": null,
     public String getStyle(){
-        return data.get("style");
+        return this.style;
     }
 
     /**
      * Returns the number of days in the tertiary fermenter
      * @return
      */
-    //    "tertiaryDays": 0,
     public int getTertiaryDays(){
         return Integer.parseInt("tertiaryDays");
     }
@@ -283,14 +306,35 @@ public class Recipe {
      * Returns the tertiary fermentation temperature
      * @return
      */
-    //    "tertiaryTemp": 0,
-    //    "tertiaryTempF": 32,
     public double getTertiaryTemp(){
-        Log.i("BrewskyImplement", "C/F based on settings");
-        return Double.parseDouble(data.get("tertiaryTemp"));
+        return Double.parseDouble(data.get((isFahrenheit()) ? "tertiaryTempF" : "tertiaryTemp"));
+    }
+
+    public boolean isPrivate(){
+        return this.isPrivate;
     }
 
     public String toString(){
         return this.name;
+    }
+
+    /*
+     * Private helper methods
+     */
+
+    /**
+     * Returns true if using Fahrenheit
+     * @return
+     */
+    private boolean isFahrenheit(){
+        return prefs.getBoolean("temperature_scale", false);
+    }
+
+    /**
+     * Returns true if using standard (U.S.) measurement
+     * @return
+     */
+    private boolean isStandard(){
+        return prefs.getBoolean("measurement_scale", false);
     }
 }

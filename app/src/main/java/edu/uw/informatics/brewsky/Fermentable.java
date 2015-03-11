@@ -3,6 +3,7 @@ package edu.uw.informatics.brewsky;
 import android.content.res.Resources;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Map;
 //    "late": false
 //}
 
-public class Fermentable {
+public class Fermentable implements Serializable {
     private String name;
     private double weight;
     private double yield;

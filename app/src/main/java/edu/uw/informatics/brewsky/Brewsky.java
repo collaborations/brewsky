@@ -46,25 +46,22 @@ public class Brewsky
     }
 
     public void loadRecipes(){
-        Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
-        startService(recipeDownloadService);
+        if(getRecipeCount() == 0) {
+            Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
+            startService(recipeDownloadService);
+        }
     }
 
-    /**
+    /*
      * Methods to implement the RecipeRepository
      */
 
-    /**
-     * Adds a single given recipe to the repository.
-     * @param recipe
-     */
+    // Adds a single given recipe to the repository.
     public void addRecipe(Recipe recipe){
         recipesList.add(recipe);
     }
 
-    /**
-     * Adds an ArrayList of recipes.
-     */
+    // Adds an ArrayList of recipes.
     public void addRecipes(ArrayList<Recipe> recipes){
         for(Recipe each : recipes){
             Log.i(getString(R.string.log_general), each.toString());
@@ -72,11 +69,16 @@ public class Brewsky
         recipesList.addAll(recipes);
     }
 
-    /**
-     * Return the entire list of recipes.
-     * @return
-     */
+    // Return the entire list of recipes.
     public ArrayList<Recipe> getRecipes(){
+        if(this.recipesList.size() == 0){
+            loadRecipes();
+        }
         return this.recipesList;
+    }
+
+    // Returns the number of recipes on the phone
+    public int getRecipeCount(){
+        return recipesList.size();
     }
 }

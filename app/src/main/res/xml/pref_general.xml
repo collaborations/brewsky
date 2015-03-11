@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:key="measurement_scale"
+        android:title="@string/measurement_scale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:summaryOn="Standard"
+        android:summaryOff="Metric"
+        android:defaultValue="true" />
+
+    <SwitchPreference
+        android:key="temperature_scale"
+        android:title="@string/temperature_scale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:summaryOn="Fahrenheit"
+        android:summaryOff="Celsius"
+        android:defaultValue="true" />
+
+
+</PreferenceScreen>
