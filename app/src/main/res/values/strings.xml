@@ -5,13 +5,22 @@
 
     <!-- Strings for logs -->
     <string name="log_general">Brewsky</string>
+    <string name="log_implement">BrewskyImplement</string>
     <string name="log_wtf">BrewskyWTF</string>
+
+    <!-- Application strings -->
     <string name="hello_world">Hello world!</string>
+    <string name="no_recipe_desc">No description for this recipe</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Activity title strings -->
     <string name="title_activity_recipe_detail">Recipe Details</string>
     <string name="title_activity_recipe_instructions">Instructions</string>
     <string name="title_activity_recipe_list">Recipe List</string>
-    <string name="api_url">https://api.malt.io</string>
     <string name="title_activity_favorites">FavoritesActivity</string>
+
+
+    <!-- API strings -->
+    <string name="api_url">http://api.malt.io</string>
 
 </resources>
