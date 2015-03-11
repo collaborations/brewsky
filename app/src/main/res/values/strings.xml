@@ -1,15 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Brewsky</string>
 
     <!-- Strings for logs -->
     <string name="log_general">Brewsky</string>
     <string name="log_wtf">BrewskyWTF</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_recipe_detail">Recipe Details</string>
     <string name="title_activity_recipe_instructions">Instructions</string>
     <string name="title_activity_recipe_list">Recipe List</string>
     <string name="api_url">https://api.malt.io</string>
+    <string name="title_activity_favorites">FavoritesActivity</string>
 
 </resources>
