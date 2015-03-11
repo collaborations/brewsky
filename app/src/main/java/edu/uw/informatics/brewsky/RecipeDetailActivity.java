@@ -1,5 +1,6 @@
 package edu.uw.informatics.brewsky;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,7 +19,7 @@ public class RecipeDetailActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recipe_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_favorites, menu);
         return true;
     }
 
@@ -30,8 +31,10 @@ public class RecipeDetailActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.favorites_button) {
+            // TODO: launch favorites activity
+            Intent favoritesIntent = new Intent(RecipeDetailActivity.this, FavoritesActivity.class);
+            startActivity(favoritesIntent);
         }
 
         return super.onOptionsItemSelected(item);
