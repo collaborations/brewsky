@@ -27,7 +27,10 @@ public class Recipe implements Serializable {
     private ArrayList<Fermentable> fermentables;
     private ArrayList<Spice> spices;
     private ArrayList<Yeast> yeast;
+    private Map<Double, String> timeline;
+    private Map<Double, String> timelineImperial;
     private Map<String, String> data;
+    private ArrayList<Integer> colorRgb;
     private Context context;
     SharedPreferences prefs;
 
@@ -103,6 +106,16 @@ public class Recipe implements Serializable {
         this.brewer = brewer;
     }
 
+    // Returns the color of the beer in an ArrayList
+    public ArrayList<Integer> getColorRgb(){
+        return this.colorRgb;
+    }
+
+    // Sets the color of the beer
+    public void setColor(ArrayList<Integer> color){
+        this.colorRgb = color;
+    }
+
     /**
      * Gets the fermentable items in the recipe, such as grains and malt
      * @return
@@ -133,6 +146,17 @@ public class Recipe implements Serializable {
      */
     public void setSpices(ArrayList<Spice> spices){
         this.spices = spices;
+    }
+
+    // Sets the timeline
+    public void setTimeline(Map<Double, String> timeline, Map<Double, String> timelineImperial){
+        this.timeline = timeline;
+        this.timelineImperial = timelineImperial;
+    }
+
+    //Returns the timeline for the specific measurement setting
+    public Map<Double, String> getTimeline(){
+        return (isStandard()) ? this.timelineImperial : this.timeline;
     }
 
     /**
@@ -310,6 +334,87 @@ public class Recipe implements Serializable {
         return Double.parseDouble(data.get((isFahrenheit()) ? "tertiaryTempF" : "tertiaryTemp"));
     }
 
+    // Returns alcohol by volume
+    public double getABV(){
+        return Double.parseDouble(data.get("abv"));
+    }
+
+    // Returns alcohol by weight
+    public double getABW(){
+        return Double.parseDouble(data.get("abw"));
+    }
+
+    // Returns brew day duration
+    public double getBrewDayDuration(){
+        return Double.parseDouble(data.get("brewDayDuration"));
+    }
+
+    // I don't know what this is?
+    public double getBuToGo(){
+        return Double.parseDouble(data.get("buToGu"));
+    }
+
+    // I don't know what this is?
+    public double getBV(){
+        return Double.parseDouble(data.get("bv"));
+    }
+
+    // Returns the calories
+    public double getCalories(){
+        return Double.parseDouble(data.get("calories"));
+    }
+
+    // Returns the color
+    public double getColor(){
+        return Double.parseDouble(data.get("color"));
+    }
+
+    // Returns some other value for color
+    public double getColorEBC(){
+        return Double.parseDouble(data.get("colorEbc"));
+    }
+
+    // Returns some other value for color
+    public double getColorLovibond(){
+        return Double.parseDouble(data.get("colorLovibond"));
+    }
+
+    // Returns the final gravity
+    public double getFinalGravity(){
+        return Double.parseDouble(data.get("fg"));
+    }
+
+    // Returns the final gravity using Plato calculation?
+    public double getFinalGravityPlato(){
+        return Double.parseDouble(data.get("fgPlato"));
+    }
+
+    // Returns the IBUs
+    public double getIBU(){
+        return Double.parseDouble(data.get("ibu"));
+    }
+
+    // Return the original gravity
+    public double getOriginalGravity(){
+        return Double.parseDouble(data.get("og"));
+    }
+
+    // Return the original gravity using Plato calculation?
+    public double getOriginalGravityPlato(){
+        return Double.parseDouble(data.get("ogPlato"));
+    }
+
+    // Returns the price
+    public double getPrice(){
+        return Double.parseDouble(data.get("price"));
+    }
+
+    // Returns the real extract
+    public double getRealExtract(){
+        return Double.parseDouble(data.get("realExtract"));
+    }
+
+    // Returns if the recipe is private or not
     public boolean isPrivate(){
         return this.isPrivate;
     }
