@@ -21,7 +21,7 @@ public class RecipeInstructionsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_instructions);
-        Intent parent = getIntent();
+        parent = getIntent();
         recipe = (Recipe) parent.getSerializableExtra("recipe");
         instructions = recipe.getTimeline();
 

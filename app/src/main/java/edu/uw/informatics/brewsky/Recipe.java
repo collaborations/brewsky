@@ -346,7 +346,8 @@ public class Recipe implements Serializable {
 
     // Returns brew day duration
     public double getBrewDayDuration(){
-        return Double.parseDouble(data.get("brewDayDuration"));
+        String value = data.get("brewDayDuration");
+        return (value.equals("NULL")) ? 0 : Double.parseDouble(value);
     }
 
     // I don't know what this is?

@@ -1,6 +1,11 @@
 package edu.uw.informatics.brewsky;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -18,6 +23,9 @@ import java.util.ArrayList;
  */
 
 public class RecipeListActivity extends ActionBarActivity {
+    private RecipeListAdapter adapter;
+    private ArrayList<Recipe> data;
+    private Brewsky app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +33,12 @@ public class RecipeListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_recipe_list);
 
         // Load the recipes
-        Brewsky app = (Brewsky) getApplication();
-        ArrayList<Recipe> data = app.getRecipes();
+        app = (Brewsky) getApplication();
+        data = app.getRecipes();
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
+        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
-        recipeList.setAdapter(recipeListAdapter);
+        recipeList.setAdapter(adapter);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -40,6 +48,13 @@ public class RecipeListActivity extends ActionBarActivity {
                 startActivity(recipeDetails);
             }
         });
+
+        // Register Receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
+        registerReceiver(broadcastReceiver, filter);
+
+
     }
 
     @Override
@@ -67,4 +82,31 @@ public class RecipeListActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(getString(R.string.log_general), "Receiving");
+            String action = intent.getAction();
+            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            long downloadID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+            if(downloadID != 0){
+                DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(downloadID);
+                Cursor c = dm.query(query);
+                if(c.moveToFirst()){
+                    int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                    if(status == DownloadManager.STATUS_SUCCESSFUL){
+                        Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
+                        data = app.getRecipes();
+                        Log.i(getString(R.string.log_general), "Number Recipes: " + data.size());
+                        adapter.clear();
+                        adapter.addAll(data);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+            }
+        }
+    };
 }
