@@ -91,6 +91,9 @@ public class RecipeListActivity extends ActionBarActivity {
         } else if (id == R.id.favorites_menu_button) {
             Intent favoritesIntent = new Intent(RecipeListActivity.this, FavoritesActivity.class);
             startActivity(favoritesIntent);
+        }else if(id == R.id.add_recipe_menu_button) {
+            Intent addRecipeIntent = new Intent(RecipeListActivity.this, AddRecipeActivity.class);
+            startActivity(addRecipeIntent);
         }
 
         return super.onOptionsItemSelected(item);

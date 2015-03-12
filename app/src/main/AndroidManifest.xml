@@ -50,11 +50,15 @@
         <activity
             android:name=".AlarmReceiverActivity"
             android:label="@string/title_activity_alarm_receiver"
-            android:theme="@android:style/Theme.Dialog">
+            android:theme="@android:style/Theme.Dialog" >
         </activity>
 
-        <receiver
-            android:name=".AlarmReceiver" />
+        <receiver android:name=".AlarmReceiver" />
+
+        <activity
+            android:name=".AddRecipeActivity"
+            android:label="@string/title_activity_add_recipe" >
+        </activity>
     </application>
 
 </manifest>

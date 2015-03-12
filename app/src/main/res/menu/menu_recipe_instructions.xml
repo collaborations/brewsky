@@ -3,8 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="edu.uw.informatics.brewsky.RecipeInstructionsActivity">
     <item
+        android:id="@+id/favorites_menu_button"
+        android:title="@string/favorites_menu_title"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/add_recipe_menu_title"
+        android:title="@string/title_activity_settings"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/settings_menu_button"
         android:title="@string/title_activity_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="300"
         app:showAsAction="never" />
 </menu>

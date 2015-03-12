@@ -1,7 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="edu.uw.informatics.brewsky.MainActivity">
+    tools:context="edu.uw.informatics.brewsky.AddRecipeActivity">
+
     <item
         android:id="@+id/favorites_menu_button"
         android:title="@string/favorites_menu_title"
