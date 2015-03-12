@@ -61,6 +61,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             holder = (RecipeListHolder)row.getTag();
         }
         Recipe recipe = data.get(position);
+
         //Set holder variables
         holder.type.setImageResource(R.drawable.amber_ale);
 

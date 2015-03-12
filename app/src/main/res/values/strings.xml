@@ -11,6 +11,8 @@
     <!-- Application strings -->
     <string name="hello_world">Hello world!</string>
     <string name="no_recipe_desc">No description for this recipe</string>
+    <string name="step">Step: %1$d</string>
+    <string name="time_left">Time: %1d</string>
 
     <!-- Activity title strings -->
     <string name="title_activity_favorites">Favorites Activity</string>
@@ -55,5 +57,8 @@
     </string-array>
 
     <string name="title_activity_comment">CommentActivity</string>
+
+    <!-- Placeholders -->
+    <string name="instructions">Instructions</string>
 
 </resources>

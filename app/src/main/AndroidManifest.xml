@@ -39,10 +39,6 @@
             android:name=".FavoritesActivity"
             android:label="@string/title_activity_favorites" >
         </activity>
-
-        <!-- Services -->
-        <service android:name=".RecipeDownloadService" />
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
@@ -52,9 +48,6 @@
             android:label="@string/title_activity_alarm_receiver"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
-
-        <receiver android:name=".AlarmReceiver" />
-
         <activity
             android:name=".FilterActivity"
             android:label="@string/title_activity_filter" >
@@ -67,6 +60,12 @@
             android:name=".CommentActivity"
             android:label="@string/title_activity_comment" >
         </activity>
+
+        <!-- Services -->
+        <service android:name=".RecipeDownloadService" />
+
+        <receiver android:name=".AlarmReceiver" />
+
     </application>
 
 </manifest>
