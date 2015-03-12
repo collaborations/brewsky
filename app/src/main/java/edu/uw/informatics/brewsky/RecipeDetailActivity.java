@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class RecipeDetailActivity extends ActionBarActivity {
     private Brewsky app;
     private Recipe recipe;
+    private RatingBar ratingBar;
 
 
     @Override
@@ -35,7 +37,6 @@ public class RecipeDetailActivity extends ActionBarActivity {
         // Set up view
         TextView name = (TextView) findViewById(R.id.recipe_name);
         TextView abv = (TextView) findViewById(R.id.recipe_abv);
-        ImageView rating = (ImageView) findViewById(R.id.recipe_rating);
         ImageView type = (ImageView) findViewById(R.id.recipe_type);
         TextView spiceList = (TextView) findViewById(R.id.spices_list);
         TextView yeastList = (TextView) findViewById(R.id.yeast_list);
@@ -44,7 +45,6 @@ public class RecipeDetailActivity extends ActionBarActivity {
         // add the data to the view
         name.setText(recipe.getName());
         abv.setText(Double.toString(recipe.getABV()) + "% ABV");
-        rating.setImageResource(R.drawable.three_star);
         type.setImageResource(R.drawable.amber_ale);
 
         // create spices list
@@ -93,18 +93,23 @@ public class RecipeDetailActivity extends ActionBarActivity {
                 startActivity(instructions);
             }
         });
+
+        addListenerOnRatingBar();
+
     }
 
-    private String arrayListToCSV(ArrayList<String> a) {
-        String s = "";
-        for(int i = 0; i < a.size(); i++) {
-            s += a.get(i);
-            if(i < a.size() - 1) {
-                s += ", ";
-            }
-        }
+    public void addListenerOnRatingBar() {
 
-        return s;
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+        //if rating value is changed,
+        //display the current rating value in the result (textview) automatically
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating,
+                                        boolean fromUser) {
+                recipe.setRating(Float.parseFloat(String.valueOf(rating)));
+            }
+        });
     }
 
 

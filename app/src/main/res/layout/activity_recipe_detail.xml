@@ -30,10 +30,13 @@
                 android:text="Large Text"
                 android:id="@+id/recipe_name" />
 
-            <ImageView
-                android:layout_width="fill_parent"
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/recipe_rating" />
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:rating="0.0" />
 
             <LinearLayout
                 android:orientation="horizontal"
