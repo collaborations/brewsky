@@ -34,7 +34,7 @@ public class RecipeListActivity extends ActionBarActivity {
 
         // Load the recipes
         app = (Brewsky) getApplication();
-        data = app.getRecipes();
+        data = app.getListRecipes();
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
@@ -98,7 +98,7 @@ public class RecipeListActivity extends ActionBarActivity {
                     int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                     if(status == DownloadManager.STATUS_SUCCESSFUL){
                         Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
-                        data = app.getRecipes();
+                        data = app.getListRecipes();
                         Log.i(getString(R.string.log_general), "Number Recipes: " + data.size());
                         adapter.clear();
                         adapter.addAll(data);

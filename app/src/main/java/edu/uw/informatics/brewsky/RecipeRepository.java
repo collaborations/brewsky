@@ -1,5 +1,6 @@
 package edu.uw.informatics.brewsky;
 
+import java.util.HashSet;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public interface RecipeRepository {
     public void addRecipe(Recipe recipe);
     public void addRecipes(ArrayList<Recipe> recipes);
-    public ArrayList<Recipe> getRecipes();
+    public HashSet<Recipe> getRecipes();
     public int getRecipeCount();
     public void loadRecipes();
 //    public ArrayList<Recipe> getSortedRecipes(String sortBy, boolean ascending);
