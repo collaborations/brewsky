@@ -21,6 +21,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     private ArrayList<Recipe> data;
     private Context context;
     private int layoutResourceId;
+    private Brewsky app;
 
     static class RecipeListHolder {
         TextView name;
@@ -32,6 +33,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 
     public RecipeListAdapter(Context context, int resource, ArrayList<Recipe> data) {
         super(context, resource);
+        app = (Brewsky) context.getApplicationContext();
         this.context = context;
         this.data = data;
         this.layoutResourceId = resource;
@@ -39,9 +41,9 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        data = app.getRecipiesList();
         View row = convertView;
         RecipeListHolder holder = null;
-
         if(row == null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
@@ -60,12 +62,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         }
         Recipe recipe = data.get(position);
         //Set holder variables
-//        Log.i("RecipeListActivity", "Need getters from recipe");
-//        holder.name.setText("Testing");
-//        holder.abv.setText("8.9%");
-//        holder.brewTime.setText("1 month");
         holder.type.setImageResource(R.drawable.amber_ale);
-
 
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
@@ -77,8 +74,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         }
         holder.ratingBar.setRating(recipe.getRating());
 
-//        holder.rating.setText(recipe.getRating());
-//        holder.type.setText(recipe.getStyle());
         return row;
     }
 

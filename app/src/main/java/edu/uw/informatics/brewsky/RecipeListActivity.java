@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /* List of available recipes
  * http://api.malt.io/#anonymous-public-api-recipe-collection
@@ -39,11 +41,11 @@ public class RecipeListActivity extends ActionBarActivity {
         // Load the recipes
         app = (Brewsky) getApplication();
         data = app.getRecipes();
-
-
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
+        Log.i(getString(R.string.log_general), data.toString());
         adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
+        Log.i("test", adapter.toString());
         recipeList.setAdapter(adapter);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,9 +74,22 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
+        Log.i("test", "im ");
+        getData();
+        Log.i("final", data.toString());
         adapter.clear();
         adapter.addAll(data);
         adapter.notifyDataSetChanged();
+
+    }
+
+    private void getData() {
+        Log.i("app", app.getAbv());
+        Log.i("type", app.getType());
+        if (!app.getAbv().equals("") && !app.getType().equals("")) {
+            data = app.getRecipes(true);
+        }
+
     }
 
     @Override

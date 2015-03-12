@@ -31,19 +31,22 @@
     <string name="title_activity_add_recipe">AddRecipeActivity</string>
 
     <string-array name="types">
+        <item>All</item>
         <item>IPA</item>
         <item>APA</item>
         <item>Amber Ale</item>
-        <item>Pilsner</item>
+        <item>Hefeweizen</item>
         <item>Stout</item>
     </string-array>
     <string-array name="abvs">
-        <item>2-5%</item>
-        <item>5-7%</item>
-        <item>7-9%</item>
-        <item>9+%</item>
+        <item>All</item>
+        <item>5.0-5.2%</item>
+        <item>5.2-5.7%</item>
+        <item>5.7-6.1%</item>
+        <item>6.1-7%</item>
     </string-array>
     <string-array name="ratings">
+        <item>All</item>
         <item>1 Star</item>
         <item>2 Star</item>
         <item>3 Star</item>
