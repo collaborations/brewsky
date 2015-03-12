@@ -26,6 +26,7 @@ public class RecipeListActivity extends ActionBarActivity {
     private RecipeListAdapter adapter;
     private ArrayList<Recipe> data;
     private Brewsky app;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,23 @@ public class RecipeListActivity extends ActionBarActivity {
         });
 
         // Register Receiver
-        IntentFilter filter = new IntentFilter();
+        filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
         registerReceiver(broadcastReceiver, filter);
 
 
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        registerReceiver(broadcastReceiver, filter);
     }
 
     @Override
