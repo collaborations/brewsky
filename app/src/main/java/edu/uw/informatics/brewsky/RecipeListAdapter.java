@@ -48,7 +48,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             // Set up view
             holder.name = (TextView)row.findViewById(R.id.recipe_list_name);
             holder.abv = (TextView)row.findViewById(R.id.recipe_list_abv);
-            holder.brewTime = (TextView)row.findViewById(R.id.recipe_list_brew_time);
             holder.rating = (ImageView)row.findViewById(R.id.recipe_list_rating);
             holder.type = (ImageView)row.findViewById(R.id.recipe_list_type);
 
@@ -68,8 +67,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
-        holder.abv.setText(Double.toString(recipe.getABV()));
-        holder.brewTime.setText(Double.toString(recipe.getBrewDayDuration()));
+        holder.abv.setText(Double.toString(recipe.getABV()) + "% ABV");
 //        holder.rating.setText(recipe.getRating());
 //        holder.type.setText(recipe.getStyle());
         return row;

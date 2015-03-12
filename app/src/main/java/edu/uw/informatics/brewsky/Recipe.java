@@ -5,6 +5,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -334,7 +336,7 @@ public class Recipe {
 
     // Returns alcohol by volume
     public double getABV(){
-        return Double.parseDouble(data.get("abv"));
+        return round(Double.parseDouble(data.get("abv")), 2);
     }
 
     // Returns alcohol by weight
@@ -440,5 +442,13 @@ public class Recipe {
      */
     private boolean isStandard(){
         return prefs.getBoolean("measurement_scale", false);
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
