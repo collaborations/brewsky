@@ -48,8 +48,9 @@ public class Recipe {
         this.slug = data.remove("slug");
         this.style = data.remove("style");
         this.isPrivate = Boolean.parseBoolean("private");
-        this.rating = 0;
+        this.rating = 0.0f;
     }
+
 
     /**
      * Returns the name of the recipe

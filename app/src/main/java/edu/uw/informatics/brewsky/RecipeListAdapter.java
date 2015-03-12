@@ -12,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -69,7 +70,13 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
         holder.abv.setText(Double.toString(recipe.getABV()) + "% ABV");
-        holder.ratingBar.setRating((float) recipe.getRating());
+        if(recipe.getRating() < 1) {
+            Random rand = new Random();
+            int randomNum = rand.nextInt(6);
+            recipe.setRating(randomNum);
+        }
+        holder.ratingBar.setRating(recipe.getRating());
+
 //        holder.rating.setText(recipe.getRating());
 //        holder.type.setText(recipe.getStyle());
         return row;
