@@ -1,8 +1,10 @@
 package edu.uw.informatics.brewsky;
 
+import android.app.DownloadManager;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
@@ -30,6 +32,9 @@ public class RecipeDownloadService extends IntentService {
         context = getApplicationContext();
         String url = getString(R.string.api_url);
 
+        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
+
         // Add any other parameters onto the URL
         Log.i(getString(R.string.log_implement), "API URL Building");
 
@@ -42,6 +47,9 @@ public class RecipeDownloadService extends IntentService {
         // Check internet availability
         Log.i(getString(R.string.log_implement), "BAD RESPONSE CODE");
         Log.i(getString(R.string.log_implement), "INTERNET CONNECTIVITY");
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
+        dm.enqueue(request);
 
         try {
             URL downloadURL = new URL(url);
@@ -52,6 +60,8 @@ public class RecipeDownloadService extends IntentService {
         } catch (IOException e) {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.onHandleIntent(): " + e.toString());
         }
+//        Intent i = new Intent()
+
 
     }
 

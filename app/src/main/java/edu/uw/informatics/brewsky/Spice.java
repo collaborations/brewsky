@@ -16,7 +16,7 @@ import java.util.Map;
 //        "form": "pellet"
 //    }
 
-public class Spice  implements Serializable {
+public class Spice {
     private String name;
     private double weight;
     private double aa;

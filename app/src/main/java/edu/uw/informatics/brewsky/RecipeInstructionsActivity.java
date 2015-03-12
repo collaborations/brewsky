@@ -13,16 +13,20 @@ import java.util.Map;
  */
 
 public class RecipeInstructionsActivity extends ActionBarActivity {
-    Intent parent;
-    Recipe recipe;
+    private Brewsky app;
+    private Intent parent;
+    private Recipe recipe;
+
     Map<Double, String> instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_instructions);
-        Intent parent = getIntent();
-        recipe = (Recipe) parent.getSerializableExtra("recipe");
+        app = (Brewsky) getApplication();
+        parent = getIntent();
+        String recipeID = parent.getStringExtra("recipe");
+        recipe = app.getRecipeByID(recipeID);
         instructions = recipe.getTimeline();
 
     }
