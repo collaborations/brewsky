@@ -91,15 +91,10 @@ public class Brewsky
         return this.overallRecipeList;
     }
 
-    public ArrayList<Recipe> getRecipes(Map<String, String> filter) {
+    public ArrayList<Recipe> getRecipes(boolean t) {
         ArrayList<Recipe> result = new ArrayList<Recipe>();
-        Log.i("Test", "here");
-        for (String key : filter.keySet()) {
-            Log.i("map", key + " : " + filter.get(key));
-        }
-
         for (Recipe recipe : overallRecipeList) {
-            Log.i("asdf", recipe.getABV() + "");
+            Log.i("asdf", recipe.getABV() + " " + abv);
             boolean abvTest = false;
             if (abv.equals("All")) {
                 abvTest = true;
@@ -107,11 +102,14 @@ public class Brewsky
                 String s = abv;
                 s = s.substring(0, s.length() - 1);
                 String[] range = s.split("-");
+                Log.i("recipe", (recipe.getABV() >= Double.parseDouble(range[0]) &&recipe.getABV() <
+                        Double.parseDouble(range[1])) + " " + recipe.toString());
                 abvTest = recipe.getABV() >= Double.parseDouble(range[0]) && recipe.getABV() <
                         Double.parseDouble(range[1]);
             }
             boolean typeTest = type.equals("All") || recipe.getStyle().equals(type);
             if (abvTest && typeTest) {
+                Log.i("re", recipe.toString());
                 result.add(recipe);
             }
         }

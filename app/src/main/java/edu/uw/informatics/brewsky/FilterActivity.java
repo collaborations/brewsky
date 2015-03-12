@@ -67,14 +67,8 @@ public class FilterActivity extends ActionBarActivity {
                 Intent i = new Intent(FilterActivity.this, RecipeListActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 // passes these as extras to Recipe List and reloads it
-                Log.i("a", (app == null) + "");
                 app.setType(type);
-                Log.i("testing123", app.getType());
-//                    i.putExtra("type", type);
                 app.setAbv(abv);
-//                    i.putExtra("abv", abv);
-//                if (!rating.equals("All"))
-//                    i.putExtra("rating", rating);
                 startActivity(i);
             }
         });
