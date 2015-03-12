@@ -8,8 +8,10 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -19,8 +21,9 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
-    private ArrayList<Recipe> recipesList;
-    private Map<String, Recipe> recipesByID;
+//    private ArrayList<Recipe> recipesList;
+    private HashSet<Recipe> recipesList;
+    private HashMap<String, Recipe> recipesByID;
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a
      * public constructor though, otherwise you could create another app instance.
@@ -43,7 +46,7 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
-        recipesList = new ArrayList<>();
+        recipesList = new HashSet<>();
         recipesByID = new HashMap<>();
         loadRecipes();
     }
@@ -74,11 +77,16 @@ public class Brewsky
     }
 
     // Return the entire list of recipes.
-    public ArrayList<Recipe> getRecipes(){
+    public HashSet<Recipe> getRecipes(){
         if(this.recipesList.size() == 0){
             loadRecipes();
         }
         return this.recipesList;
+    }
+
+    // Return an ArrayList of recipes
+    public ArrayList<Recipe> getListRecipes(){
+        return new ArrayList<>(this.recipesList);
     }
 
     public Recipe getRecipeByID(String id){
