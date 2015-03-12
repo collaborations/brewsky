@@ -93,6 +93,9 @@ public class RecipeListActivity extends ActionBarActivity {
         } else if (id == R.id.filter_button) {
             Intent filterIntent = new Intent(RecipeListActivity.this, FilterActivity.class);
             startActivity(filterIntent);
+        }else if(id == R.id.add_recipe_menu_button) {
+            Intent addRecipeIntent = new Intent(RecipeListActivity.this, AddRecipeActivity.class);
+            startActivity(addRecipeIntent);
         }
 
         return super.onOptionsItemSelected(item);

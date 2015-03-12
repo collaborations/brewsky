@@ -1,28 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="edu.uw.informatics.brewsky.MainActivity">
-    <item
-        android:id="@+id/filter_button"
-        android:icon="@drawable/filter"
-        android:title="Filter"/>
+    tools:context="edu.uw.informatics.brewsky.AddRecipeActivity">
 
+    <item
+        android:id="@+id/favorites_menu_button"
+        android:title="@string/favorites_menu_title"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
     <item
         android:id="@+id/add_recipe_menu_button"
         android:title="@string/add_recipe_menu_title"
         android:orderInCategory="200"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/settings_menu_button"
         android:title="@string/title_activity_settings"
         android:orderInCategory="300"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/favorites_menu_button"
-        android:title="@string/title_activity_favorites"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-
 </menu>

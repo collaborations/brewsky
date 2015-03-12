@@ -58,6 +58,11 @@
         <activity
             android:name=".FilterActivity"
             android:label="@string/title_activity_filter" >
+          </activity>
+
+        <activity
+            android:name=".AddRecipeActivity"
+            android:label="@string/title_activity_add_recipe" >
         </activity>
     </application>
 

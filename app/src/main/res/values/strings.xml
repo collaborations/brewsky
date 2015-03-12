@@ -22,8 +22,13 @@
     <!-- API strings -->
     <string name="api_url">http://api.malt.io</string>
     <string name="title_activity_alarm_receiver">AlarmReceiverActivity</string>
+
+    <!-- Menu strings -->
+    <string name="favorites_menu_title">Favorites</string>
+    <string name="add_recipe_menu_title">Add Recipe</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_filter">FilterActivity</string>
+    <string name="title_activity_add_recipe">AddRecipeActivity</string>
 
     <string-array name="types">
         <item>IPA</item>
