@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /* List of available recipes
  * http://api.malt.io/#anonymous-public-api-recipe-collection
@@ -32,13 +34,32 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
-
+        Bundle bundle = getIntent().getExtras();
+        Map<String, String> filters = null;
+        if (bundle != null) {
+            filters = new HashMap<String, String>();
+            String type = bundle.getString("type");
+            if (type != null)
+                filters.put("type", type);
+            String abv = bundle.getString("abv");
+            if (abv != null)
+                filters.put("abv", abv);
+            // filters.put("rating", bundle.getString("rating"));
+        }
         // Load the recipes
         app = (Brewsky) getApplication();
-        data = app.getRecipes();
+        if (filters == null) {
+            data = app.getRecipes();
+        } else {
+            data = app.getRecipes(filters);
+            Log.i("activity", (adapter == null) + "");
+            adapter.notifyDataSetChanged();
+        }
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
+        Log.i(getString(R.string.log_general), data.toString());
         adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
+        Log.i("test", adapter.toString());
         recipeList.setAdapter(adapter);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,6 +88,30 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
+        Log.i("test", "im ");
+        getData();
+        adapter.clear();
+        adapter.addAll(data);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    private void getData() {
+        Log.i("app", app.getAbv());
+        Log.i("IPA", app.getType());
+        if (!app.getAbv().equals("") && !app.getType().equals("")) {
+
+            Map<String, String> filters = null;
+            filters = new HashMap<String, String>();
+            if (app.getType() != null)
+                filters.put("type", app.getType());
+            String abv = app.getAbv();
+            if (abv != null)
+                filters.put("abv", abv);
+            // filters.put("rating", bundle.getString("rating"));
+            data = app.getRecipes(filters);
+        }
+
     }
 
     @Override

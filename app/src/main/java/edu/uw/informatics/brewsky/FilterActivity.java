@@ -2,6 +2,7 @@ package edu.uw.informatics.brewsky;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,10 +15,12 @@ import java.util.logging.Filter;
 
 
 public class FilterActivity extends ActionBarActivity {
+    private Brewsky app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        app = (Brewsky) getApplication();
         setContentView(R.layout.activity_filter);
         Button submit = (Button) findViewById(R.id.submit);
         addListener(submit);
@@ -62,10 +65,16 @@ public class FilterActivity extends ActionBarActivity {
                 Toast.makeText(FilterActivity.this, type + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
 
                 Intent i = new Intent(FilterActivity.this, RecipeListActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 // passes these as extras to Recipe List and reloads it
-                i.putExtra("type", type);
-                i.putExtra("abv", abv);
-                i.putExtra("rating", rating);
+                Log.i("a", (app == null) + "");
+                app.setType(type);
+                Log.i("testing123", app.getType());
+//                    i.putExtra("type", type);
+                app.setAbv(abv);
+//                    i.putExtra("abv", abv);
+//                if (!rating.equals("All"))
+//                    i.putExtra("rating", rating);
                 startActivity(i);
             }
         });

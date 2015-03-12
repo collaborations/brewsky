@@ -39,7 +39,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     public View getView(int position, View convertView, ViewGroup parent){
         View row = convertView;
         RecipeListHolder holder = null;
-
         if(row == null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);

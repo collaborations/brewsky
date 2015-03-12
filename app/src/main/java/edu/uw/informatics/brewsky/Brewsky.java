@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,8 +23,11 @@ public class Brewsky
 
     private static Brewsky instance;
     private ArrayList<Recipe> recipesList;
+    private ArrayList<Recipe> overallRecipeList;
 //    private HashSet<Recipe> recipesList;
     private HashMap<String, Recipe> recipesByID;
+    private String type = "All";
+    private String abv = "All";
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a
      * public constructor though, otherwise you could create another app instance.
@@ -46,7 +50,8 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
-        recipesList = new ArrayList<>();
+        recipesList = new ArrayList<Recipe>();
+        overallRecipeList = new ArrayList<Recipe>();
         recipesByID = new HashMap<>();
         loadRecipes();
     }
@@ -67,6 +72,7 @@ public class Brewsky
         if(!recipesByID.containsKey(recipe.getId())){
             recipesByID.put(recipe.getId(), recipe);
             recipesList.add(recipe);
+            overallRecipeList.add(recipe);
         }
     }
 
@@ -82,7 +88,53 @@ public class Brewsky
         if(this.recipesList.size() == 0){
             loadRecipes();
         }
-        return this.recipesList;
+        return this.overallRecipeList;
+    }
+
+    public ArrayList<Recipe> getRecipes(Map<String, String> filter) {
+        ArrayList<Recipe> result = new ArrayList<Recipe>();
+        Log.i("Test", "here");
+        for (String key : filter.keySet()) {
+            Log.i("map", key + " : " + filter.get(key));
+        }
+
+        for (Recipe recipe : overallRecipeList) {
+            Log.i("asdf", recipe.getABV() + "");
+            boolean abvTest = false;
+            if (abv.equals("All")) {
+                abvTest = true;
+            } else {
+                String s = abv;
+                s = s.substring(0, s.length() - 1);
+                String[] range = s.split("-");
+                abvTest = recipe.getABV() >= Double.parseDouble(range[0]) && recipe.getABV() <
+                        Double.parseDouble(range[1]);
+            }
+            boolean typeTest = type.equals("All") || recipe.getStyle().equals(type);
+            if (abvTest && typeTest) {
+                result.add(recipe);
+            }
+        }
+        Log.i("current", overallRecipeList.toString());
+        Log.i("result", result.toString());
+        recipesList = result;
+        return result;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getAbv() {
+        return abv;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAbv(String abv) {
+        this.abv = abv;
     }
 
     // Return a recipe with the give ID
