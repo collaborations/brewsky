@@ -3,10 +3,17 @@ package edu.uw.informatics.brewsky;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 
 public class RecipeDetailActivity extends ActionBarActivity {
@@ -25,7 +32,57 @@ public class RecipeDetailActivity extends ActionBarActivity {
         String recipeID = launchedMe.getStringExtra("recipe");
         recipe = app.getRecipeByID(recipeID);
 
+        // Set up view
+        TextView name = (TextView) findViewById(R.id.recipe_name);
+        TextView abv = (TextView) findViewById(R.id.recipe_abv);
+        ImageView rating = (ImageView) findViewById(R.id.recipe_rating);
+        ImageView type = (ImageView) findViewById(R.id.recipe_type);
+        TextView spiceList = (TextView) findViewById(R.id.spices_list);
+        TextView yeastList = (TextView) findViewById(R.id.yeast_list);
+        TextView fermentableList = (TextView) findViewById(R.id.fermentables_list);
 
+        // add the data to the view
+        name.setText(recipe.getName());
+        abv.setText(Double.toString(recipe.getABV()) + "% ABV");
+        rating.setImageResource(R.drawable.three_star);
+        type.setImageResource(R.drawable.amber_ale);
+
+        // create spices list
+        String spices = "";
+        ArrayList<Spice> recipeSpices = recipe.getSpices();
+        for(int i = 0; i < recipeSpices.size(); i++) {
+            Spice spice = recipeSpices.get(i);
+            spices += spice.getName();
+            if( i < recipeSpices.size() - 1) {
+                spices += ", ";
+            }
+        }
+
+        // create yeast list
+        String yeasts = "";
+        ArrayList<Yeast> recipeYeast = recipe.getYeast();
+        for(int i = 0; i < recipeYeast.size(); i++) {
+            Yeast yeast = recipeYeast.get(i);
+            yeasts += yeast.getName();
+            if( i < recipeYeast.size() - 1) {
+                yeasts += ", ";
+            }
+        }
+
+        // create fermentable list
+        String fermentables = "";
+        ArrayList<Fermentable> recipeFermentables = recipe.getFermentables();
+        for(int i = 0; i < recipeFermentables.size(); i++) {
+            Fermentable fermentable = recipeFermentables.get(i);
+            fermentables += fermentable.getName();
+            if( i < recipeFermentables.size() - 1) {
+                fermentables += ", ";
+            }
+        }
+
+        spiceList.setText(spices);
+        yeastList.setText(yeasts);
+        fermentableList.setText(fermentables);
 
         Button btn_instructions = (Button) findViewById(R.id.btn_instruction_start);
         btn_instructions.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +93,18 @@ public class RecipeDetailActivity extends ActionBarActivity {
                 startActivity(instructions);
             }
         });
+    }
+
+    private String arrayListToCSV(ArrayList<String> a) {
+        String s = "";
+        for(int i = 0; i < a.size(); i++) {
+            s += a.get(i);
+            if(i < a.size() - 1) {
+                s += ", ";
+            }
+        }
+
+        return s;
     }
 
 
