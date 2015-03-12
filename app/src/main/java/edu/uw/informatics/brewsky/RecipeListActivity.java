@@ -54,7 +54,6 @@ public class RecipeListActivity extends ActionBarActivity {
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
         registerReceiver(broadcastReceiver, filter);
 
-
     }
 
     @Override
@@ -78,6 +77,9 @@ public class RecipeListActivity extends ActionBarActivity {
         } else if (id == R.id.favorites_menu_button) {
             Intent favoritesIntent = new Intent(RecipeListActivity.this, FavoritesActivity.class);
             startActivity(favoritesIntent);
+        } else if (id == R.id.filter_button) {
+            Intent filterIntent = new Intent(RecipeListActivity.this, FilterActivity.class);
+            startActivity(filterIntent);
         }
 
         return super.onOptionsItemSelected(item);
