@@ -2,7 +2,6 @@ package edu.uw.informatics.brewsky;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +33,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         this.context = context;
         this.data = data;
         this.layoutResourceId = resource;
+        Log.i("Temp", "Constructor: " + data.toString());
 
 
     }
@@ -59,6 +59,9 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         } else {
             holder = (RecipeListHolder)row.getTag();
         }
+        Log.i("Temp", "Position: " + position);
+        Log.i("Temp", "Size:     " + data.size());
+        Log.i("Temp", "toString: " + data.toString());
         Recipe recipe = data.get(position);
         //Set holder variables
         Log.i("RecipeListActivity", "Need getters from recipe");

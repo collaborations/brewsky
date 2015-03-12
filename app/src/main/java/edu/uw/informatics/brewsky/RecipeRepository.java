@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public interface RecipeRepository {
     public void addRecipe(Recipe recipe);
     public void addRecipes(ArrayList<Recipe> recipes);
-    public HashSet<Recipe> getRecipes();
+    public ArrayList<Recipe> getRecipes();
     public int getRecipeCount();
     public void loadRecipes();
 //    public ArrayList<Recipe> getSortedRecipes(String sortBy, boolean ascending);

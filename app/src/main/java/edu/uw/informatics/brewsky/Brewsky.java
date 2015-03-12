@@ -21,8 +21,8 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
-//    private ArrayList<Recipe> recipesList;
-    private HashSet<Recipe> recipesList;
+    private ArrayList<Recipe> recipesList;
+//    private HashSet<Recipe> recipesList;
     private HashMap<String, Recipe> recipesByID;
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a
@@ -46,7 +46,7 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
-        recipesList = new HashSet<>();
+        recipesList = new ArrayList<>();
         recipesByID = new HashMap<>();
         loadRecipes();
     }
@@ -64,31 +64,28 @@ public class Brewsky
 
     // Adds a single given recipe to the repository.
     public void addRecipe(Recipe recipe){
-        recipesByID.put(recipe.getId(), recipe);
-        recipesList.add(recipe);
+        if(!recipesByID.containsKey(recipe.getId())){
+            recipesByID.put(recipe.getId(), recipe);
+            recipesList.add(recipe);
+        }
     }
 
     // Adds an ArrayList of recipes.
     public void addRecipes(ArrayList<Recipe> recipes){
         for (Recipe each: recipes){
-            recipesByID.put(each.getId(), each);
+            addRecipe(each);
         }
-        recipesList.addAll(recipes);
     }
 
     // Return the entire list of recipes.
-    public HashSet<Recipe> getRecipes(){
+    public ArrayList<Recipe> getRecipes(){
         if(this.recipesList.size() == 0){
             loadRecipes();
         }
         return this.recipesList;
     }
 
-    // Return an ArrayList of recipes
-    public ArrayList<Recipe> getListRecipes(){
-        return new ArrayList<>(this.recipesList);
-    }
-
+    // Return a recipe with the give ID
     public Recipe getRecipeByID(String id){
         return recipesByID.get(id);
     }

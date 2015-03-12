@@ -34,7 +34,8 @@ public class RecipeListActivity extends ActionBarActivity {
 
         // Load the recipes
         app = (Brewsky) getApplication();
-        data = app.getListRecipes();
+        data = app.getRecipes();
+        Log.i("Temp", "Activity: " + data.toString());
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
@@ -66,7 +67,7 @@ public class RecipeListActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle acxtion bar item clicks here. The action bar will
+        // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -98,7 +99,8 @@ public class RecipeListActivity extends ActionBarActivity {
                     int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                     if(status == DownloadManager.STATUS_SUCCESSFUL){
                         Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
-                        data = app.getListRecipes();
+                        data = app.getRecipes();
+                        Log.i("Temp", "Receiver: " + data.toString());
                         Log.i(getString(R.string.log_general), "Number Recipes: " + data.size());
                         adapter.clear();
                         adapter.addAll(data);
