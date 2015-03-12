@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:summaryOn="Standard"
         android:summaryOff="Metric"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
 
     <SwitchPreference
         android:key="temperature_scale"

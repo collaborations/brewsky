@@ -22,7 +22,6 @@ public class Brewsky
 
     private static Brewsky instance;
     private ArrayList<Recipe> recipesList;
-//    private HashSet<Recipe> recipesList;
     private HashMap<String, Recipe> recipesByID;
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a

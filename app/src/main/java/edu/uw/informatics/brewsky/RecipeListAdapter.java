@@ -57,21 +57,14 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             holder = (RecipeListHolder)row.getTag();
         }
         Recipe recipe = data.get(position);
-        //Set holder variables
-//        Log.i("RecipeListActivity", "Need getters from recipe");
-//        holder.name.setText("Testing");
-//        holder.abv.setText("8.9%");
-//        holder.brewTime.setText("1 month");
+
+
         holder.rating.setImageResource(R.drawable.three_star);
         holder.type.setImageResource(R.drawable.amber_ale);
 
-
-        // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
         holder.abv.setText(Double.toString(recipe.getABV()));
         holder.brewTime.setText(Double.toString(recipe.getBrewDayDuration()));
-//        holder.rating.setText(recipe.getRating());
-//        holder.type.setText(recipe.getStyle());
         return row;
     }
 

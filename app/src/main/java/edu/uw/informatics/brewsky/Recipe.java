@@ -35,7 +35,6 @@ public class Recipe {
 
     public Recipe(Map<String, String> data, Context context){
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
         this.data = data;
         this.created = data.remove("created");
         String description = data.remove("description");
@@ -439,6 +438,6 @@ public class Recipe {
      * @return
      */
     private boolean isStandard(){
-        return prefs.getBoolean("measurement_scale", false);
+        return prefs.getBoolean("measurement_scale", true);
     }
 }

@@ -1,12 +1,15 @@
 package edu.uw.informatics.brewsky;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -25,6 +28,9 @@ public class TaskFragment extends Fragment {
 
     private double time;
     private String instructions;
+    private ImageButton done;
+
+    private GestureDetector gestureDetector;
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,7 +65,7 @@ public class TaskFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task, container, false);
@@ -72,47 +78,82 @@ public class TaskFragment extends Fragment {
         TextView textView = (TextView) view.findViewById(R.id.txt_task_instructions);
         textView.setText((CharSequence) instructions);
 
+        //Time
+        TextView timeView = (TextView) view.findViewById(R.id.txt_time);
+        timeView.setText(getTime(time));
 
+        //Time
+        this.done = (ImageButton) view.findViewById(R.id.btn_task_done);
+        this.done.setVisibility((container.getId() - 1 == ((RecipeInstructionsActivity) getActivity()).getCurrent()) ? View.VISIBLE : View.INVISIBLE);
+        this.done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentSwipe(container.getId());
+            }
+        });
+
+        //Gestures
+        gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener(){
+            private float THRESHOLD_X = 200;
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if(Math.abs(e1.getX() - e2.getX()) > THRESHOLD_X){
+                    mListener.onFragmentSwipe(container.getId());
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+        });
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    public void setCurrent(){
+        if(this.done != null) {
+            this.done.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
+        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentSwipe(int id);
+    }
+
+    private String getTime(double sec){
+        double min = time / 60;
+        if(min > 0){  //More than a minute
+            return String.format("%.0f min", min);
+        } else {
+            return String.format("%.0f sec", sec);
+        }
     }
 
 }

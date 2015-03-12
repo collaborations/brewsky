@@ -8,30 +8,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Map;
-//import java.util.Queue;
 
 /* Recipe Instructions
  * http://api.malt.io/#recipes-recipe-get
  */
 
-public class RecipeInstructionsActivity extends ActionBarActivity {
+public class RecipeInstructionsActivity
+        extends ActionBarActivity
+        implements TaskFragment.OnFragmentInteractionListener {
+
     private Brewsky app;
     private Recipe recipe;
     private FragmentManager fragmentManager;
-//    private Queue<TaskFragment> tasks;
     private ArrayList<TaskFragment> tasks;
-    private TaskFragment current;
+    private int current;
     private int taskContainer;
 
     Map<Double, String> instructions;
@@ -43,41 +38,60 @@ public class RecipeInstructionsActivity extends ActionBarActivity {
         app = (Brewsky) getApplication();
         Intent parent = getIntent();
         recipe = app.getRecipeByID(parent.getStringExtra("recipe"));
-        instructions = recipe.getTimeline();
         fragmentManager = getFragmentManager();
         taskContainer = R.id.tasks_container;
-
-
-
-
+        current = 0;
         createTasks();
         showTasks();
-
     }
 
 
     private void createTasks(){
+        instructions = recipe.getTimeline();
         tasks = new ArrayList<>();
         for(double key : instructions.keySet()){
-            Log.i(getString(R.string.log_general), "" + key + " -> " + instructions.get(key));
             TaskFragment fragment = TaskFragment.newInstance(key, instructions.get(key));
             tasks.add(fragment);
         }
     }
 
-    private void nextTask(){
-        Log.i(getString(R.string.log_implement), "NEXT TASK");
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        createTasks();
+        showTasks();
+    }
+
+    public void onFragmentSwipe(int id) {
+        if(tasks.size() == 1){
+            Log.i(getString(R.string.log_general), "Finished Instructions");
+        } else if(current == (id - 1)) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            TaskFragment frag = tasks.get(current);
+            ((LinearLayout) findViewById(taskContainer)).removeView(findViewById(id));
+            transaction.remove(frag);
+            transaction.commit();
+//            if(current == tasks.size() - 1){
+//                current++;
+//            } else if(current < tasks.size() - 1){
+            if(current < tasks.size() - 1){
+                current++;
+                tasks.get(current).setCurrent();
+            }
+        }
     }
 
     // Builds all of the tasks to be shown on screen
     private void showTasks(){
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
         LinearLayout parentContainer = (LinearLayout) findViewById(taskContainer);
-        ViewGroup.LayoutParams parentParams = parentContainer.getLayoutParams();
-        int w = parentParams.width;
         TaskFragment previous = null;
-        int i = 1;
-        for(TaskFragment each : tasks) {
+
+        int i = current + 1;
+        int index = current;
+        for(; index < tasks.size(); index++) {
+            TaskFragment each = tasks.get(index);
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
             RelativeLayout container = new RelativeLayout(this);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
@@ -86,13 +100,13 @@ public class RecipeInstructionsActivity extends ActionBarActivity {
             }
             container.setLayoutParams(params);
             container.setId(i);
+            container.setMinimumHeight(100);
             parentContainer.addView(container);
             transaction.add(container.getId(), each, "Step" + i);
             previous = each;
             i++;
+            transaction.commit();
         }
-        transaction.commit();
-
     }
 
     @Override
@@ -113,11 +127,23 @@ public class RecipeInstructionsActivity extends ActionBarActivity {
         if(id == R.id.settings_menu_button){
             Intent settingsIntent = new Intent(RecipeInstructionsActivity.this, SettingsActivity.class);
             startActivity(settingsIntent);
-        } else if (id == R.id.favorites_menu_button) {
-            Intent favoritesIntent = new Intent(RecipeInstructionsActivity.this, FavoritesActivity.class);
-            startActivity(favoritesIntent);
+            instructions = recipe.getTimeline();
+            resetTasks();
+        } else if (id == R.id.reset_tasks_button) {
+            current = 0;
+            resetTasks();
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetTasks(){
+        LinearLayout container = (LinearLayout) findViewById(R.id.tasks_container);
+        container.removeAllViews();
+        createTasks();
+        showTasks();
+    }
+
+    public int getCurrent(){
+        return this.current;
     }
 }
