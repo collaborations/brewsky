@@ -30,6 +30,8 @@ public class RecipeListAdapter extends ArrayAdapter<String> {
         RatingBar ratingBar;
     }
 
+
+
     public RecipeListAdapter(Context context, int resource, ArrayList<String> data) {
         super(context, resource);
         app = (Brewsky) context.getApplicationContext();
@@ -38,9 +40,13 @@ public class RecipeListAdapter extends ArrayAdapter<String> {
         this.layoutResourceId = resource;
     }
 
+//    @Override
+//    public int getCount() {
+//        return this.data.size();
+//    };
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        data = new ArrayList<>(app.getRecipeIDs());
         View row = convertView;
         RecipeListHolder holder = null;
         if(row == null){

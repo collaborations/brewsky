@@ -28,6 +28,8 @@ public class RecipeListActivity extends ActionBarActivity {
     private Brewsky app;
     private IntentFilter filter;
     private RatingBar ratingBar;
+    private boolean empty;
+    private ListView recipeList;
 
 
     @Override
@@ -37,9 +39,7 @@ public class RecipeListActivity extends ActionBarActivity {
 
         // Load the recipes
         app = (Brewsky) getApplication();
-        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<>(app.getRecipeIDs()));
-        final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
-        recipeList.setAdapter(adapter);
+        recipeList = (ListView) findViewById(R.id.recipe_list);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -52,8 +52,15 @@ public class RecipeListActivity extends ActionBarActivity {
         // Register Receiver
         filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
+        filter.addAction("RecipeDownloadService");
+        filter.addAction("RECIPE_PARSING_FINISHED");
         registerReceiver(broadcastReceiver, filter);
 
+    }
+
+    private void setAdapter(){
+        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>());
+        recipeList.setAdapter(adapter);
     }
 
     @Override
@@ -66,10 +73,9 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
-        adapter.clear();
-        adapter.addAll(app.getRecipeIDs());
-        adapter.notifyDataSetChanged();
-
+        if(adapter != null) {
+            reloadData();
+        }
     }
 
     @Override
@@ -107,26 +113,40 @@ public class RecipeListActivity extends ActionBarActivity {
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(getString(R.string.log_general), "Receiving");
             String action = intent.getAction();
-            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-            long downloadID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-            if(downloadID != 0){
-                DownloadManager.Query query = new DownloadManager.Query();
-                query.setFilterById(downloadID);
-                Cursor c = dm.query(query);
-                if(c.moveToFirst()){
-                    int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
-                    if(status == DownloadManager.STATUS_SUCCESSFUL){
-                        Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
-                        data = app.getRecipes();
-                        adapter.clear();
-                        adapter.addAll(app.getRecipeIDs());
-                        adapter.notifyDataSetChanged();
+            Log.i(getString(R.string.log_general), "Receiving: " + action);
+            if(action.equals("RECIPE_PARSING_FINISHED")){
+                Log.i("LocalManagerBroadcast", "Received, reloading data.");
+                reloadData();
+            } else {
+                DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                long downloadID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                if (downloadID != 0) {
+                    DownloadManager.Query query = new DownloadManager.Query();
+                    query.setFilterById(downloadID);
+                    Cursor c = dm.query(query);
+                    if (c.moveToFirst()) {
+                        int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                        if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                            Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
+                            reloadData();
+                        }
                     }
-                }
 
+                }
             }
         }
     };
+
+    private void reloadData(){
+        if(adapter == null){
+            Log.i(getString(R.string.log_general), "RecipeListAdapter Null, setting");
+            adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>(app.getRecipeIDs()));
+            recipeList.setAdapter(adapter);
+        } else {
+            adapter.clear();
+            adapter.addAll(app.getRecipeIDs());
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

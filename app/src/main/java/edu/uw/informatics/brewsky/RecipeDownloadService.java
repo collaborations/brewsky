@@ -5,11 +5,20 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,17 +32,20 @@ public class RecipeDownloadService extends IntentService {
     public static final String TAG = IntentService.class.getSimpleName();
     private JsonReader json;
     private Context context;
+    private String localPath;
+    private int count;
 
     public RecipeDownloadService(){
         super(TAG);
     }
 
     public void onHandleIntent(Intent intent){
+        count = 0;
         context = getApplicationContext();
         String url = getString(R.string.api_url);
 
         DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-
+        localPath = "recipes.json";
 
         // Add any other parameters onto the URL
         Log.i(getString(R.string.log_implement), "API URL Building");
@@ -50,22 +62,61 @@ public class RecipeDownloadService extends IntentService {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 //        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         dm.enqueue(request);
-
         try {
-            URL downloadURL = new URL(url);
-            InputStreamReader inputStreamReader = new InputStreamReader(downloadURL.openStream());
+            File file = new File(getFilesDir().toString() + "/recipes.json");
+            if(!file.exists()){
+                downloadFile(url, file);
+            }
+            Log.i(getString(R.string.log_general), "Reading file from local path");
+            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             json = new JsonReader(inputStreamReader);
             processRecipes();
-//            Log.i(getString(R.string.log_general), json.toString());
         } catch (IOException e) {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.onHandleIntent(): " + e.toString());
         }
-//        Intent i = new Intent()
+
+        Log.i(getString(R.string.log_general), "Finished: " + count + " recipes downloaded.");
+
+        Intent broad = new Intent("RecipeDownloadService");
+        broad.setAction("RECIPE_PARSING_FINISHED");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broad);
 
 
     }
 
+    private void downloadFile(String url, File file){
+        Log.i(getString(R.string.log_general), "Downloading file.");
+        try {
+            BufferedReader input = null;
+            PrintWriter output = null;
+            try {
+                URL download = new URL(url);
+                input = new BufferedReader(new InputStreamReader(download.openStream()));
+                output = new PrintWriter(new FileOutputStream(file));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    output.println(line);
+                    Log.i(getString(R.string.log_general), "Reading string: " + line);
+                }
+            } finally {
+                if (input != null){
+                    input.close();
+                }
+                if (output != null){
+                    output.close();
+                }
+            }
+        } catch (MalformedURLException e) {
+            Log.i(getString(R.string.log_general), "Malformed URL:" + e.getMessage());
+        } catch (IOException e) {
+            Log.i(getString(R.string.log_general), "IO Exception:" + e.getMessage());
+        }
+    }
+
     private void processRecipes(){
+        Log.i(getString(R.string.log_general), "Beginning to process file");
         ArrayList<Recipe> recipes = new ArrayList<>();
         try {
             //Array of recipes
@@ -74,6 +125,7 @@ public class RecipeDownloadService extends IntentService {
                 // While there are recipes
                 json.beginObject();
                 recipes.add(parseRecipe());
+                count++;
                 json.endObject();
             }
             //Close array of recipes

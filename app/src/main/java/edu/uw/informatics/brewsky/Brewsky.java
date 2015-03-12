@@ -55,7 +55,12 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         initInstance();
+        setup();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
+        loadRecipes();
+    }
+
+    private void setup(){
         recipeList = new ArrayList<Recipe>();
         recipesByID = new HashMap<>();
         recipesByRating = new HashMap<>();
@@ -66,7 +71,6 @@ public class Brewsky
         }
         commentsByRecipeID = new HashMap<>();
         styles = new HashMap<String, String>();
-        loadRecipes();
         addBeerStyles();
     }
 
@@ -83,10 +87,8 @@ public class Brewsky
     }
 
     public void loadRecipes(){
-        if(getRecipeCount() == 0) {
-            Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
-            startService(recipeDownloadService);
-        }
+        Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
+        startService(recipeDownloadService);
     }
 
     // Adds a single given recipe to the repository.
@@ -141,10 +143,7 @@ public class Brewsky
 
     // Return the entire list of recipes.
     public ArrayList<Recipe> getRecipes(){
-        if(this.recipeList.size() == 0){
-            loadRecipes();
-        }
-        return this.recipeList;
+        return new ArrayList<Recipe>();
     }
 
     public Set<String> getRecipeIDs(){

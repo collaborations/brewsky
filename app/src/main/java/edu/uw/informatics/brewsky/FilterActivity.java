@@ -23,7 +23,8 @@ public class FilterActivity extends ActionBarActivity {
     private RecipeListAdapter adapter;
     private ListView list;
     private ArrayList<String> filtered;
-    private boolean change;
+//    private android.widget.Filter filter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +32,9 @@ public class FilterActivity extends ActionBarActivity {
         setContentView(R.layout.activity_filter);
         app = (Brewsky) getApplication();
         list = (ListView) findViewById(R.id.filter_list);
-        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<>(app.getRecipeIDs()));
+        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>(app.getRecipeIDs()));
         list.setAdapter(adapter);
-        change = false;
+//        filter = adapter.getFilter();
 
         Button submit = (Button) findViewById(R.id.filter_button);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -43,8 +44,8 @@ public class FilterActivity extends ActionBarActivity {
                 String abv = String.valueOf(((Spinner) findViewById(R.id.filter_abv)).getSelectedItem());
                 String rating = String.valueOf(((Spinner) findViewById(R.id.filter_rating)).getSelectedItem());
                 Toast.makeText(FilterActivity.this, type + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
-                filterRecipes(type, abv, rating);
-//                showResults();
+//                filterRecipes(type, abv, rating);
+                adapter.getCount();
 
             }
         });
@@ -56,6 +57,7 @@ public class FilterActivity extends ActionBarActivity {
                 Recipe clickedRecipe = app.getRecipeByID((String) list.getItemAtPosition(position));
                 recipeDetails.putExtra("recipe", clickedRecipe.getId());
                 startActivity(recipeDetails);
+//                showResults();
             }
         });
     }
@@ -63,11 +65,10 @@ public class FilterActivity extends ActionBarActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if(filtered == null){
-            filtered = new ArrayList<>(app.getRecipeIDs());
-            change = true;
-        }
-        showResults();
+//        if(filtered == null){
+//            filtered = new ArrayList<>(app.getRecipeIDs());
+//        }
+//        showResults();
     }
 
     @Override
@@ -93,34 +94,35 @@ public class FilterActivity extends ActionBarActivity {
     }
 
     private void showResults(){
-        if(change) {
-            adapter.clear();
-            adapter.addAll(filtered);
-            adapter.notifyDataSetChanged();
-            change = false;
-        }
+        adapter.clear();
+        adapter.addAll(filtered);
+        adapter.notifyDataSetChanged();
     }
 
     // Returns an ArrayList of all the IDs that match the filter
     private void filterRecipes(String style, String abv, String rating) {
-        change = true;
-        ArrayList<String> filtered = new ArrayList<>(app.getRecipeIDs());
-        if(style.equals("All") && abv.equals("All") && rating.equals("All")){
-            Log.i(getString(R.string.log_general), "All filters off");
-        } else {
-            if (!abv.equals("All")) {
-                String[] range = abv.split("-");
-                String end = range[1].substring(0, range[1].length() - 1);
-                filtered.retainAll(app.getRecipesInABVRange(Double.parseDouble(range[0]), Double.parseDouble(end)));
-            }
-            if (!style.equals("All")) {
-                filtered.retainAll(app.getRecipesByStyle(style));
-            }
-            if (!rating.equals("All")) {
-                filtered.retainAll(app.getRecipesByRating(Integer.parseInt(rating.substring(0, 1))));
-            }
-        }
-        this.filtered = filtered;
-        showResults();
+
+//        ArrayList<String> filtered = new ArrayList<>(app.getRecipeIDs());
+//        if(style.equals("All") && abv.equals("All") && rating.equals("All")){
+//            Log.i(getString(R.string.log_general), "All filters off");
+//        } else {
+//            if (!abv.equals("All")) {
+//                String[] range = abv.split("-");
+//                String end = range[1].substring(0, range[1].length() - 1);
+//                filtered.retainAll(app.getRecipesInABVRange(Double.parseDouble(range[0]), Double.parseDouble(end)));
+//            }
+//            if (!style.equals("All")) {
+//                filtered.retainAll(app.getRecipesByStyle(style));
+//            }
+//            if (!rating.equals("All")) {
+//                filtered.retainAll(app.getRecipesByRating(Integer.parseInt(rating.substring(0, 1))));
+//            }
+//        }
+//
+//        this.filtered = filtered;
+//        for(String each : filtered){
+//            Log.i("FILTERED: ", each + " --> " + app.getRecipeByID(each));
+//        }
+//        showResults();
     }
 }
