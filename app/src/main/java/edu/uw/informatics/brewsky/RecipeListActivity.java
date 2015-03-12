@@ -16,10 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RatingBar;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /* List of available recipes
  * http://api.malt.io/#anonymous-public-api-recipe-collection
@@ -40,23 +37,18 @@ public class RecipeListActivity extends ActionBarActivity {
 
         // Load the recipes
         app = (Brewsky) getApplication();
-        data = app.getRecipes();
-        Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
-        Log.i(getString(R.string.log_general), data.toString());
-        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
+        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<>(app.getRecipeIDs()));
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
-        Log.i("test", adapter.toString());
         recipeList.setAdapter(adapter);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent recipeDetails = new Intent(RecipeListActivity.this, RecipeDetailActivity.class);
-                Recipe clickedRecipe = (Recipe) recipeList.getItemAtPosition(position);
+                Recipe clickedRecipe = app.getRecipeByID((String) recipeList.getItemAtPosition(position));
                 recipeDetails.putExtra("recipe", clickedRecipe.getId());
                 startActivity(recipeDetails);
             }
         });
-
         // Register Receiver
         filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
@@ -74,21 +66,9 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
-        Log.i("test", "im ");
-        getData();
-        Log.i("final", data.toString());
         adapter.clear();
-        adapter.addAll(data);
+        adapter.addAll(app.getRecipeIDs());
         adapter.notifyDataSetChanged();
-
-    }
-
-    private void getData() {
-        Log.i("app", app.getAbv());
-        Log.i("type", app.getType());
-        if (!app.getAbv().equals("") && !app.getType().equals("")) {
-            data = app.getRecipes(true);
-        }
 
     }
 
@@ -141,7 +121,7 @@ public class RecipeListActivity extends ActionBarActivity {
                         Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
                         data = app.getRecipes();
                         adapter.clear();
-                        adapter.addAll(data);
+                        adapter.addAll(app.getRecipeIDs());
                         adapter.notifyDataSetChanged();
                     }
                 }

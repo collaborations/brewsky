@@ -6,26 +6,69 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Intent;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Filter;
 
 
 public class FilterActivity extends ActionBarActivity {
     private Brewsky app;
+    private RecipeListAdapter adapter;
+    private ListView list;
+    private ArrayList<String> filtered;
+    private boolean change;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (Brewsky) getApplication();
         setContentView(R.layout.activity_filter);
-        Button submit = (Button) findViewById(R.id.submit);
-        addListener(submit);
+        app = (Brewsky) getApplication();
+        list = (ListView) findViewById(R.id.filter_list);
+        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<>(app.getRecipeIDs()));
+        list.setAdapter(adapter);
+        change = false;
+
+        Button submit = (Button) findViewById(R.id.filter_button);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = String.valueOf(((Spinner) findViewById(R.id.filter_style)).getSelectedItem());
+                String abv = String.valueOf(((Spinner) findViewById(R.id.filter_abv)).getSelectedItem());
+                String rating = String.valueOf(((Spinner) findViewById(R.id.filter_rating)).getSelectedItem());
+                Toast.makeText(FilterActivity.this, type + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
+                filterRecipes(type, abv, rating);
+//                showResults();
+
+            }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent recipeDetails = new Intent(FilterActivity.this, RecipeDetailActivity.class);
+                Recipe clickedRecipe = app.getRecipeByID((String) list.getItemAtPosition(position));
+                recipeDetails.putExtra("recipe", clickedRecipe.getId());
+                startActivity(recipeDetails);
+            }
+        });
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(filtered == null){
+            filtered = new ArrayList<>(app.getRecipeIDs());
+            change = true;
+        }
+        showResults();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,29 +92,35 @@ public class FilterActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addListener(Button submit) {
-        final Spinner typeSpinner = (Spinner) findViewById(R.id.type);
-        typeSpinner.setSelection(4);
-        typeSpinner.setSelection(2);
-        typeSpinner.setSelection(0);
-        final Spinner abvSpinner = (Spinner) findViewById(R.id.abv);
-        final Spinner ratingSpinner = (Spinner) findViewById(R.id.rating);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String type = String.valueOf(typeSpinner.getSelectedItem());
-                String abv = String.valueOf(abvSpinner.getSelectedItem());
-                String rating = String.valueOf(ratingSpinner.getSelectedItem());
-                Toast.makeText(FilterActivity.this, type + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
+    private void showResults(){
+        if(change) {
+            adapter.clear();
+            adapter.addAll(filtered);
+            adapter.notifyDataSetChanged();
+            change = false;
+        }
+    }
 
-                Intent i = new Intent(FilterActivity.this, RecipeListActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                // passes these as extras to Recipe List and reloads it
-                app.setType(type);
-                app.setAbv(abv);
-                app.setRating(rating);
-                startActivity(i);
+    // Returns an ArrayList of all the IDs that match the filter
+    private void filterRecipes(String style, String abv, String rating) {
+        change = true;
+        ArrayList<String> filtered = new ArrayList<>(app.getRecipeIDs());
+        if(style.equals("All") && abv.equals("All") && rating.equals("All")){
+            Log.i(getString(R.string.log_general), "All filters off");
+        } else {
+            if (!abv.equals("All")) {
+                String[] range = abv.split("-");
+                String end = range[1].substring(0, range[1].length() - 1);
+                filtered.retainAll(app.getRecipesInABVRange(Double.parseDouble(range[0]), Double.parseDouble(end)));
             }
-        });
+            if (!style.equals("All")) {
+                filtered.retainAll(app.getRecipesByStyle(style));
+            }
+            if (!rating.equals("All")) {
+                filtered.retainAll(app.getRecipesByRating(Integer.parseInt(rating.substring(0, 1))));
+            }
+        }
+        this.filtered = filtered;
+        showResults();
     }
 }

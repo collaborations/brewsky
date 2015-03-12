@@ -24,11 +24,12 @@ public class Brewsky
     private static Brewsky instance;
     private ArrayList<Recipe> recipeList;
     private HashMap<String, Recipe> recipesByID;
+    private HashMap<String, HashSet<String>> recipesByStyle;
     private HashMap<String, ArrayList<String>> commentsByRecipeID;
-    private String type = "All";
-    private String abv = "All";
-    private String rating = "All";
-    private Map<String, String> beers;
+    private HashMap<Integer, HashSet<String>> recipesByRating;
+    private HashMap<String, HashSet<String>> recipesByABV;
+
+    private Map<String, String> styles;
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a
      * public constructor though, otherwise you could create another app instance.
@@ -38,6 +39,9 @@ public class Brewsky
     }
 
     public static Brewsky getInstance(){
+        if(instance == null){
+            initInstance();
+        }
         return instance;
     }
 
@@ -50,22 +54,28 @@ public class Brewsky
     @Override
     public void onCreate(){
         super.onCreate();
+        initInstance();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
         recipeList = new ArrayList<Recipe>();
         recipesByID = new HashMap<>();
+        recipesByRating = new HashMap<>();
+        recipesByStyle = new HashMap<>();
+        recipesByABV = new HashMap<>();
+        for(int i = 0; i <= 5; i++){
+            recipesByRating.put(i, new HashSet<String>());
+        }
         commentsByRecipeID = new HashMap<>();
-        beers = new HashMap<String, String>();
-        addBeers();
+        styles = new HashMap<String, String>();
         loadRecipes();
+        addBeerStyles();
     }
 
-    private void addBeers() {
-        beers.put("american-pale-ale", "APA");
-        beers.put("dark-beer", "Stout");
-        beers.put("hefeweizen", "Hefeweizen");
-        beers.put("irish-red", "Amber Ale");
-        beers.put("test-recipe", "IPA");
-
+    private void addBeerStyles() {
+        styles.put("american-pale-ale", "APA");
+        styles.put("dark-beer", "Stout");
+        styles.put("hefeweizen", "Hefeweizen");
+        styles.put("irish-red", "Amber Ale");
+        styles.put("test-recipe", "IPA");
     }
 
     public Brewsky getApplication(){
@@ -81,10 +91,45 @@ public class Brewsky
 
     // Adds a single given recipe to the repository.
     public void addRecipe(Recipe recipe){
-        if(!recipesByID.containsKey(recipe.getId())){
-            recipesByID.put(recipe.getId(), recipe);
+        recipe.setStyle(styles.get(recipe.getSlug()));
+        String id = recipe.getId();
+        if(!recipesByID.containsKey(id)){       // Check to see if the recipe already exists
             recipeList.add(recipe);
+            recipesByID.put(id, recipe);
+            recipesByRating.get(recipe.getRating()).add(id);
+            String style = recipe.getStyle();
+            if (recipesByStyle == null){
+                recipesByStyle = new HashMap<>();
+            }
+            if (!recipesByStyle.containsKey(style)) { // If style doesn't exist, create it
+                recipesByStyle.put(style, new HashSet<String>());
+            }
+            recipesByStyle.get(style).add(id);
+
+            String abv = String.format("%.1f", recipe.getABV());
+            if(!recipesByABV.containsKey(abv)){
+                recipesByABV.put(abv, new HashSet<String>());
+            }
+            recipesByABV.get(abv).add(id);
         }
+    }
+
+    // Called by Recipes, it changes the rating in the map
+    public void updateRating(String id, int oldRating, int newRating){
+        if(recipesByRating == null){
+            recipesByRating = new HashMap<>();
+        }
+        // Remove old rating
+        if(recipesByRating.get(oldRating) != null){
+            if(recipesByRating.get(oldRating).contains(id)){
+                recipesByRating.get(oldRating).remove(id);
+            }
+        }
+        // New rating
+        if (recipesByRating.get(newRating) == null){
+            recipesByRating.put(newRating, new HashSet<String>());
+        }
+        recipesByRating.get(newRating).add(id);
     }
 
     // Adds an ArrayList of recipes.
@@ -102,49 +147,54 @@ public class Brewsky
         return this.recipeList;
     }
 
-    public ArrayList<Recipe> getRecipes(boolean t) {
-        ArrayList<Recipe> filtered = new ArrayList<>();
-        for (Recipe recipe : recipeList) {
-            boolean abvTest = false;
-            if (abv.equals("All")) {
-                abvTest = true;
-            } else {
-                String s = abv;
-                s = s.substring(0, s.length() - 1);
-                String[] range = s.split("-");
-                abvTest = recipe.getABV() >= Double.parseDouble(range[0]) && recipe.getABV() <
-                        Double.parseDouble(range[1]);
-            }
-            boolean typeTest = type.equals("All") || beers.get(recipe.getSlug()).equals(type);
-            boolean ratingTest = rating.equals("All") || recipe.getRating() == Float.parseFloat(rating.split(" ")[0]);
-            if (abvTest && typeTest && ratingTest) {
-                filtered.add(recipe);
-            }
-        }
-        Log.i("current", recipeList.toString());
-        Log.i("result", filtered.toString());
-        return filtered;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getAbv() {
-        return abv;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setAbv(String abv) {
-        this.abv = abv;
+    public Set<String> getRecipeIDs(){
+        return recipesByID.keySet();
     }
 
     // Return a recipe with the give ID
     public Recipe getRecipeByID(String id){
-        return recipesByID.get(id);
+        return (recipesByID.containsKey(id)) ? recipesByID.get(id) : null;
+    }
+
+    // Returns a HashSet of recipe IDs with the given ABV
+    public HashSet<String> getRecipesByABV(double abv){
+        String key = String.format("%.1f", abv);
+        return (recipesByABV.containsKey(key)) ? recipesByABV.get(key) : new HashSet<String>();
+    }
+
+    // Returns a Hashset of recipe IDs within a given ABV range
+    public HashSet<String> getRecipesInABVRange(double start, double end){
+        HashSet<String> combined = new HashSet<>();
+        while(start <= end){
+            String current = String.format("%.1f", start);
+            if(recipesByABV.containsKey(current)){
+                HashSet<String> values = recipesByABV.get(current);
+                Log.i("Current ABV", "" + start);
+                for(String temp : values){
+                    Log.i("ABV", "BEER: " + getRecipeByID(temp).getName() + " " + "ABV: " + getRecipeByID(temp).getABV());
+                }
+                combined.addAll(recipesByABV.get(current));
+            }
+            start += 0.1;
+        }
+        return combined;
+    }
+
+    // Returns a HashSet of recipe IDs with the given rating
+    public HashSet<String> getRecipesByRating(int rating){
+        Log.i("Rating", "" + recipesByRating.toString());
+        return (recipesByRating.containsKey(rating)) ? recipesByRating.get(rating) : new HashSet<String>();
+    }
+
+    // Returns a HashSet of recipe IDs with the given style
+    public HashSet<String> getRecipesByStyle(String style){
+        if(recipesByStyle == null){
+            recipesByStyle = new HashMap<>();
+        }
+        if(recipesByStyle.containsKey(style)){
+            return recipesByStyle.get(style);
+        }
+        return new HashSet<>();
     }
 
     // Returns the number of recipes on the phone

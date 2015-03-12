@@ -3,12 +3,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -33,8 +32,8 @@ public class Recipe {
     private Map<Double, String> timelineImperial;
     private Map<String, String> data;
     private ArrayList<Integer> colorRgb;
-    SharedPreferences prefs;
-    private float rating;
+    private int rating;
+    private SharedPreferences prefs;
 
     public Recipe(Map<String, String> data, Context context){
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,8 +46,10 @@ public class Recipe {
         this.slug = data.remove("slug");
         this.style = data.remove("style");
         this.isPrivate = Boolean.parseBoolean("private");
-        this.rating = 0.0f;
+        Random rand = new Random();
+        this.rating = rand.nextInt(6);
     }
+
 
 
     /**
@@ -321,6 +322,13 @@ public class Recipe {
     }
 
     /**
+     * Set the style of the beer
+     */
+    public void setStyle(String style){
+        this.style = style;
+    }
+
+    /**
      * Returns the number of days in the tertiary fermenter
      * @return
      */
@@ -426,8 +434,12 @@ public class Recipe {
         return this.name;
     }
 
-    public float getRating() { return this.rating; }
-    public void setRating(float rating) { this.rating  = rating; }
+    public int getRating() { return this.rating; }
+    public void setRating(int rating) {
+        int old = this.rating;
+        this.rating = rating;
+        Brewsky.getInstance().updateRating(this.id, old, rating);
+    }
     /*
      * Private helper methods
      */

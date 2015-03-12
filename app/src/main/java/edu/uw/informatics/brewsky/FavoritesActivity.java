@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 
 public class FavoritesActivity extends ActionBarActivity {
+    private Brewsky app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +18,9 @@ public class FavoritesActivity extends ActionBarActivity {
 
         // Load the recipes
         // Change this to get recipes that are currently downloaded
-        ArrayList<Recipe> data = getFavorites();
+        app = Brewsky.getInstance();
 
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<>(app.getRecipeIDs()));
     }
 
     private ArrayList<Recipe> getFavorites() {

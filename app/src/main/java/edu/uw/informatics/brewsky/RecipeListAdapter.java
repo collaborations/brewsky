@@ -17,8 +17,8 @@ import java.util.Random;
 /**
  * Created by ginoclement on 3/10/15.
  */
-public class RecipeListAdapter extends ArrayAdapter<Recipe> {
-    private ArrayList<Recipe> data;
+public class RecipeListAdapter extends ArrayAdapter<String> {
+    private ArrayList<String> data;
     private Context context;
     private int layoutResourceId;
     private Brewsky app;
@@ -26,12 +26,11 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     static class RecipeListHolder {
         TextView name;
         TextView abv;
-        TextView brewTime;
         ImageView type;
         RatingBar ratingBar;
     }
 
-    public RecipeListAdapter(Context context, int resource, ArrayList<Recipe> data) {
+    public RecipeListAdapter(Context context, int resource, ArrayList<String> data) {
         super(context, resource);
         app = (Brewsky) context.getApplicationContext();
         this.context = context;
@@ -41,7 +40,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        data = app.getRecipiesList();
+        data = new ArrayList<>(app.getRecipeIDs());
         View row = convertView;
         RecipeListHolder holder = null;
         if(row == null){
@@ -60,7 +59,8 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         } else {
             holder = (RecipeListHolder)row.getTag();
         }
-        Recipe recipe = data.get(position);
+        Log.i("Adapter", data.get(position) + " --> " + app.getRecipeByID(data.get(position)));
+        Recipe recipe = app.getRecipeByID(data.get(position));
 
         //Set holder variables
         holder.type.setImageResource(R.drawable.amber_ale);
@@ -68,12 +68,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
         holder.abv.setText(Double.toString(recipe.getABV()) + "% ABV");
-        if(recipe.getRating() < 1) {
-            Random rand = new Random();
-            int randomNum = rand.nextInt(6);
-            recipe.setRating(randomNum);
-        }
-        holder.ratingBar.setRating(recipe.getRating());
+        holder.ratingBar.setRating(Float.valueOf("" + recipe.getRating()));
 
         return row;
     }

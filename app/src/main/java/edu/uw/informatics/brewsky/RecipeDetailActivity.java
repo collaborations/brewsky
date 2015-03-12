@@ -149,7 +149,7 @@ public class RecipeDetailActivity extends ActionBarActivity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
                                         boolean fromUser) {
-                recipe.setRating(Float.parseFloat(String.valueOf(rating)));
+                recipe.setRating(Integer.parseInt(String.format("%.0f", rating)));
             }
         });
     }
