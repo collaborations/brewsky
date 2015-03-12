@@ -33,9 +33,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         this.context = context;
         this.data = data;
         this.layoutResourceId = resource;
-        Log.i("Temp", "Constructor: " + data.toString());
-
-
     }
 
     @Override
@@ -59,15 +56,12 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         } else {
             holder = (RecipeListHolder)row.getTag();
         }
-        Log.i("Temp", "Position: " + position);
-        Log.i("Temp", "Size:     " + data.size());
-        Log.i("Temp", "toString: " + data.toString());
         Recipe recipe = data.get(position);
         //Set holder variables
-        Log.i("RecipeListActivity", "Need getters from recipe");
-        holder.name.setText("Testing");
-        holder.abv.setText("8.9%");
-        holder.brewTime.setText("1 month");
+//        Log.i("RecipeListActivity", "Need getters from recipe");
+//        holder.name.setText("Testing");
+//        holder.abv.setText("8.9%");
+//        holder.brewTime.setText("1 month");
         holder.rating.setImageResource(R.drawable.three_star);
         holder.type.setImageResource(R.drawable.amber_ale);
 
