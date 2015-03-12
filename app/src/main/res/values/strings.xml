@@ -15,11 +15,13 @@
     <string name="time_left">Time: %1d</string>
 
     <!-- Activity title strings -->
-    <string name="title_activity_favorites">Favorites Activity</string>
+    <string name="title_activity_favorites">Favorite Beers</string>
     <string name="title_activity_recipe_detail">Recipe Details</string>
     <string name="title_activity_recipe_instructions">Instructions</string>
     <string name="title_activity_recipe_list">Recipe List</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_filter">Filters</string>
+    <string name="title_activity_add_recipe">Add A Recipe</string>
 
     <!-- API strings -->
     <string name="api_url">http://api.malt.io</string>
@@ -29,8 +31,6 @@
     <string name="favorites_menu_title">Favorites</string>
     <string name="add_recipe_menu_title">Add Recipe</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_filter">FilterActivity</string>
-    <string name="title_activity_add_recipe">AddRecipeActivity</string>
 
     <string-array name="types">
         <item>All</item>
