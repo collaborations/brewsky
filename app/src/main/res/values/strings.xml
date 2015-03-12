@@ -50,4 +50,7 @@
         <item>4 Star</item>
         <item>5 Star</item>
     </string-array>
+
+    <string name="title_activity_comment">CommentActivity</string>
+
 </resources>

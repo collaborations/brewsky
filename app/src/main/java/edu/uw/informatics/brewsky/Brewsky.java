@@ -24,6 +24,7 @@ public class Brewsky
     private ArrayList<Recipe> recipesList;
 //    private HashSet<Recipe> recipesList;
     private HashMap<String, Recipe> recipesByID;
+    private HashMap<String, ArrayList<String>> commentsByRecipeID;
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a
      * public constructor though, otherwise you could create another app instance.
@@ -48,6 +49,7 @@ public class Brewsky
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
         recipesList = new ArrayList<>();
         recipesByID = new HashMap<>();
+        commentsByRecipeID = new HashMap<>();
         loadRecipes();
     }
 
@@ -93,6 +95,17 @@ public class Brewsky
     // Returns the number of recipes on the phone
     public int getRecipeCount(){
         return recipesList.size();
+    }
+
+    public void addComment(String id, String comment) {
+        if(!commentsByRecipeID.containsKey(id)) {
+            commentsByRecipeID.put(id, new ArrayList<String>());
+        }
+        commentsByRecipeID.get(id).add(comment);
+    }
+
+    public ArrayList<String> getCommentsByID(String id) {
+        return commentsByRecipeID.get(id);
     }
 
 }

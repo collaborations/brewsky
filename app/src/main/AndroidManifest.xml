@@ -9,7 +9,7 @@
     <application
         android:name=".Brewsky"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/brewsky_b"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".RecipeListActivity"
-            android:label="@string/title_activity_recipe_list" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,11 +58,14 @@
         <activity
             android:name=".FilterActivity"
             android:label="@string/title_activity_filter" >
-          </activity>
-
+        </activity>
         <activity
             android:name=".AddRecipeActivity"
             android:label="@string/title_activity_add_recipe" >
+        </activity>
+        <activity
+            android:name=".CommentActivity"
+            android:label="@string/title_activity_comment" >
         </activity>
     </application>
 

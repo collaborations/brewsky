@@ -6,16 +6,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="edu.uw.informatics.brewsky.RecipeDetailActivity">
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -38,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
-                android:id="@+id/recipe_name"
-                android:textSize="25dp" />
+                android:id="@+id/recipe_name" />
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -60,17 +49,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Medium Text"
                     android:id="@+id/recipe_abv"
-                    android:layout_marginRight="15dp"
-                    android:textSize="20dp"
-                    android:textIsSelectable="true" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Start Brewing"
-                    android:id="@+id/btn_instruction_start"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="15dp" />
+                    android:layout_marginRight="15dp" />
 
             </LinearLayout>
 
@@ -93,98 +72,73 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Spices"
             android:id="@+id/spices_title"
-            android:layout_marginRight="15dp"
-            android:textSize="15dp" />
+            android:layout_marginRight="15dp" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:id="@+id/spices_list"
-            android:layout_marginRight="15dp"
-            android:textSize="9dp" />
+            android:layout_marginRight="15dp" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Yeast"
             android:id="@+id/yeast_title"
-            android:layout_marginRight="15dp"
-            android:textSize="15dp" />
+            android:layout_marginRight="15dp" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:id="@+id/yeast_list"
-            android:layout_marginRight="15dp"
-            android:textSize="9dp" />
+            android:layout_marginRight="15dp" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Fermentables"
             android:id="@+id/fermentables_title"
-            android:layout_marginRight="15dp"
-            android:textSize="15dp" />
+            android:layout_marginRight="15dp" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:id="@+id/fermentables_list"
-            android:layout_marginRight="15dp"
-            android:textSize="9dp" />
+            android:layout_marginRight="15dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Brewing"
+            android:id="@+id/btn_instruction_start"
+            android:layout_centerHorizontal="true" />
     </LinearLayout>
-    </LinearLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1
-            ">
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/comments"
-        android:paddingTop="5dp"
+        android:paddingTop="16dp"
         android:layout_below="@+id/information">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Comments"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/title"
-            android:textSize="15dp"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:id="@+id/commentSubmit"
-            android:textSize="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/input_box"
-            android:layout_below="@+id/title" />
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/input_box"
             android:inputType="textCapSentences"
-            android:hint="What do you think of this recipe?"
-            android:layout_below="@+id/title"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/commentSubmit"
-            android:layout_toStartOf="@+id/commentSubmit"
-            android:textSize="11dp" />
-
-        <ListView
-            android:layout_width="fill_parent"
+            android:hint="What do you think of this recipe?"/>
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/commentBox"
-            android:layout_below="@+id/input_box"></ListView>
+            android:layout_gravity="center"
+            android:text="Submit"
+            android:id="@+id/commentSubmit"/>
+        </LinearLayout>
     </RelativeLayout>
-    </LinearLayout>
-    </LinearLayout>
-</RelativeLayout>

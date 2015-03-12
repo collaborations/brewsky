@@ -4,12 +4,19 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -19,8 +26,9 @@ import java.util.ArrayList;
 
 public class RecipeDetailActivity extends ActionBarActivity {
     private Brewsky app;
-    private Recipe recipe;
     private RatingBar ratingBar;
+    private ArrayAdapter commentAdapter;
+    private Recipe recipe;
 
 
     @Override
@@ -31,9 +39,9 @@ public class RecipeDetailActivity extends ActionBarActivity {
         app = (Brewsky) getApplication();
 
         Intent launchedMe = getIntent();
-        String recipeID = launchedMe.getStringExtra("recipe");
+        final String recipeID = launchedMe.getStringExtra("recipe");
         recipe = app.getRecipeByID(recipeID);
-
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         // Set up view
         TextView name = (TextView) findViewById(R.id.recipe_name);
         TextView abv = (TextView) findViewById(R.id.recipe_abv);
@@ -95,6 +103,33 @@ public class RecipeDetailActivity extends ActionBarActivity {
         });
 
         addListenerOnRatingBar();
+        final ListView commentView = (ListView) findViewById(R.id.commentBox);
+        ArrayList<String> comments = app.getCommentsByID(recipeID);
+        if(comments != null) {
+            // If there are comments to start populate them on creation
+            commentAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, comments);
+            Log.d("comments", "ListView is " + commentView.toString());
+            Log.d("comments", "Adapter is " + commentAdapter);
+            commentView.setAdapter(commentAdapter);
+            commentAdapter.notifyDataSetChanged();
+        }
+        Button commentSubmit = (Button) findViewById(R.id.commentSubmit);
+        commentSubmit.setOnClickListener(new View.OnClickListener() {
+            // When clicked add the comment to the list view
+            @Override
+            public void onClick(View v) {
+                EditText text = (EditText) findViewById(R.id.input_box);
+                app.addComment(recipeID, text.getText().toString());
+                Log.i("comments", app.getCommentsByID(recipeID).toString());
+                ArrayList<String> newComments = app.getCommentsByID(recipeID);
+                if(commentAdapter == null) {
+                    // if the adapter was not set on creation set it now
+                    commentAdapter = new ArrayAdapter<String>(RecipeDetailActivity.this, android.R.layout.simple_list_item_1, newComments);
+                    commentView.setAdapter(commentAdapter);
+                }
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
