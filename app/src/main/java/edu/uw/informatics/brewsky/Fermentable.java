@@ -18,7 +18,7 @@ import java.util.Map;
 //    "late": false
 //}
 
-public class Fermentable implements Serializable {
+public class Fermentable {
     private String name;
     private double weight;
     private double yield;

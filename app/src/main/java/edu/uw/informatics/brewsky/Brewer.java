@@ -15,7 +15,7 @@ import java.util.Map;
 //    "image": "https://plus.google.com/s2/photos/profile/117442582930902051362?sz=SIZE"
 //}
 
-public class Brewer implements Serializable {
+public class Brewer {
     private String id;
     private String name;
     private String image;

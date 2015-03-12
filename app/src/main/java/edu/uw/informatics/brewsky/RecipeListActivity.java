@@ -44,7 +44,7 @@ public class RecipeListActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent recipeDetails = new Intent(RecipeListActivity.this, RecipeDetailActivity.class);
                 Recipe clickedRecipe = (Recipe) recipeList.getItemAtPosition(position);
-                recipeDetails.putExtra("recipe", clickedRecipe);
+                recipeDetails.putExtra("recipe", clickedRecipe.getId());
                 startActivity(recipeDetails);
             }
         });

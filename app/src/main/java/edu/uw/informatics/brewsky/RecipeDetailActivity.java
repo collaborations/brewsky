@@ -10,20 +10,30 @@ import android.widget.Button;
 
 
 public class RecipeDetailActivity extends ActionBarActivity {
+    private Brewsky app;
+    private Recipe recipe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+
+        app = (Brewsky) getApplication();
+
         Intent launchedMe = getIntent();
-        final Recipe recipe = (Recipe) launchedMe.getSerializableExtra("recipe");
+        String recipeID = launchedMe.getStringExtra("recipe");
+        recipe = app.getRecipeByID(recipeID);
+
+
 
         Button btn_instructions = (Button) findViewById(R.id.btn_instruction_start);
         btn_instructions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent instructions = new Intent(RecipeDetailActivity.this, RecipeInstructionsActivity.class);
-                instructions.putExtra("recipe", recipe);
+                instructions.putExtra("recipe", recipe.getId());
+                startActivity(instructions);
             }
         });
     }

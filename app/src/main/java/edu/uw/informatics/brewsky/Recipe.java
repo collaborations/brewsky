@@ -15,7 +15,7 @@ import java.util.Map;
  * data map, mainly minor properties, I have also commented above how they are stored in the map
  * with an example. This is separate from the Javadoc comments and will be removed later.
  */
-public class Recipe implements Serializable {
+public class Recipe {
     private Brewer brewer;
     private String created;
     private String desc;
@@ -31,11 +31,9 @@ public class Recipe implements Serializable {
     private Map<Double, String> timelineImperial;
     private Map<String, String> data;
     private ArrayList<Integer> colorRgb;
-    private Context context;
     SharedPreferences prefs;
 
     public Recipe(Map<String, String> data, Context context){
-        this.context = context;
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         this.data = data;

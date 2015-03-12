@@ -15,7 +15,7 @@ import java.util.Map;
 //}
 
 
-public class Yeast implements Serializable {
+public class Yeast {
     private String name;
     private String type;
     private String form;
