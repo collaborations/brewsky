@@ -21,5 +21,7 @@
 
     <!-- API strings -->
     <string name="api_url">http://api.malt.io</string>
+    <string name="title_activity_alarm_receiver">AlarmReceiverActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
