@@ -120,6 +120,7 @@ public class RecipeDetailActivity extends ActionBarActivity {
             public void onClick(View v) {
                 EditText text = (EditText) findViewById(R.id.input_box);
                 app.addComment(recipeID, text.getText().toString());
+                text.setText("");
                 Log.i("comments", app.getCommentsByID(recipeID).toString());
                 ArrayList<String> newComments = app.getCommentsByID(recipeID);
                 if(commentAdapter == null) {

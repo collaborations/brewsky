@@ -171,7 +171,7 @@ public class Brewsky
         if(!commentsByRecipeID.containsKey(id)) {
             commentsByRecipeID.put(id, new ArrayList<String>());
         }
-        commentsByRecipeID.get(id).add(comment);
+        commentsByRecipeID.get(id).add(0, comment);
     }
 
     public ArrayList<String> getCommentsByID(String id) {
