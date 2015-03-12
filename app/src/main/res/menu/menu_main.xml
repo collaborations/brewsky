@@ -7,12 +7,15 @@
         android:icon="@drawable/filter"
         android:title="Filter"/>
     <item
-        android:id="@+id/menu_button"
-        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-        android:title="Menu"/>
-    <item
         android:id="@+id/settings_menu_button"
         android:title="@string/title_activity_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/favorites_menu_button"
+        android:title="@string/title_activity_favorites"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+
 </menu>

@@ -4,6 +4,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
+import android.content.Intent;
+
+import java.util.logging.Filter;
 
 
 public class FilterActivity extends ActionBarActivity {
@@ -12,6 +19,8 @@ public class FilterActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+        Button submit = (Button) findViewById(R.id.submit);
+        addListener(submit);
     }
 
 
@@ -35,5 +44,30 @@ public class FilterActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addListener(Button submit) {
+        final Spinner typeSpinner = (Spinner) findViewById(R.id.type);
+        typeSpinner.setSelection(4);
+        typeSpinner.setSelection(2);
+        typeSpinner.setSelection(0);
+        final Spinner abvSpinner = (Spinner) findViewById(R.id.abv);
+        final Spinner ratingSpinner = (Spinner) findViewById(R.id.rating);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = String.valueOf(typeSpinner.getSelectedItem());
+                String abv = String.valueOf(abvSpinner.getSelectedItem());
+                String rating = String.valueOf(ratingSpinner.getSelectedItem());
+                Toast.makeText(FilterActivity.this, type + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(FilterActivity.this, RecipeListActivity.class);
+                // passes these as extras to Recipe List and reloads it
+                i.putExtra("type", type);
+                i.putExtra("abv", abv);
+                i.putExtra("rating", rating);
+                startActivity(i);
+            }
+        });
     }
 }
