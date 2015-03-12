@@ -69,6 +69,7 @@ public class FilterActivity extends ActionBarActivity {
                 // passes these as extras to Recipe List and reloads it
                 app.setType(type);
                 app.setAbv(abv);
+                app.setRating(rating);
                 startActivity(i);
             }
         });

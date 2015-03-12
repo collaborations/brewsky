@@ -22,12 +22,13 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
-    private ArrayList<Recipe> recipesList;
+    private static ArrayList<Recipe> recipesList;
     private ArrayList<Recipe> overallRecipeList;
-//    private HashSet<Recipe> recipesList;
     private HashMap<String, Recipe> recipesByID;
     private String type = "All";
     private String abv = "All";
+    private String rating = "All";
+    private Map<String, String> beers;
 
     /* Application manifest throws an error if I set this as private. I don't believe we want a
      * public constructor though, otherwise you could create another app instance.
@@ -53,7 +54,18 @@ public class Brewsky
         recipesList = new ArrayList<Recipe>();
         overallRecipeList = new ArrayList<Recipe>();
         recipesByID = new HashMap<>();
+        beers = new HashMap<String, String>();
+        addBeers();
         loadRecipes();
+    }
+
+    private void addBeers() {
+        beers.put("american-pale-ale", "APA");
+        beers.put("dark-beer", "Stout");
+        beers.put("hefeweizen", "Hefeweizen");
+        beers.put("irish-red", "Amber Ale");
+        beers.put("test-recipe", "IPA");
+
     }
 
     public Brewsky getApplication(){
@@ -83,6 +95,14 @@ public class Brewsky
         }
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
     // Return the entire list of recipes.
     public ArrayList<Recipe> getRecipes(){
         if(this.recipesList.size() == 0){
@@ -91,10 +111,13 @@ public class Brewsky
         return this.overallRecipeList;
     }
 
+    public ArrayList<Recipe> getRecipiesList() {
+        return recipesList;
+    }
+
     public ArrayList<Recipe> getRecipes(boolean t) {
-        ArrayList<Recipe> result = new ArrayList<Recipe>();
+        recipesList.clear();
         for (Recipe recipe : overallRecipeList) {
-            Log.i("asdf", recipe.getABV() + " " + abv);
             boolean abvTest = false;
             if (abv.equals("All")) {
                 abvTest = true;
@@ -102,21 +125,18 @@ public class Brewsky
                 String s = abv;
                 s = s.substring(0, s.length() - 1);
                 String[] range = s.split("-");
-                Log.i("recipe", (recipe.getABV() >= Double.parseDouble(range[0]) &&recipe.getABV() <
-                        Double.parseDouble(range[1])) + " " + recipe.toString());
                 abvTest = recipe.getABV() >= Double.parseDouble(range[0]) && recipe.getABV() <
                         Double.parseDouble(range[1]);
             }
-            boolean typeTest = type.equals("All") || recipe.getStyle().equals(type);
-            if (abvTest && typeTest) {
-                Log.i("re", recipe.toString());
-                result.add(recipe);
+            boolean typeTest = type.equals("All") || beers.get(recipe.getSlug()).equals(type);
+            boolean ratingTest = rating.equals("All") || recipe.getRating() == Float.parseFloat(rating.split(" ")[0]);
+            if (abvTest && typeTest && ratingTest) {
+                recipesList.add(recipe);
             }
         }
         Log.i("current", overallRecipeList.toString());
-        Log.i("result", result.toString());
-        recipesList = result;
-        return result;
+        Log.i("result", recipesList.toString());
+        return recipesList;
     }
 
     public String getType() {
