@@ -47,8 +47,8 @@ public class Brewsky
 
     public void loadRecipes(){
         if(getRecipeCount() == 0) {
-            Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
-            startService(recipeDownloadService);
+            //Intent recipeDownloadService = new Intent(Brewsky.this, RecipeDownloadService.class);
+            //startService(recipeDownloadService);
         }
     }
 

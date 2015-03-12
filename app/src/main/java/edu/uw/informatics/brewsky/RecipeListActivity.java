@@ -11,23 +11,34 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /* List of available recipes
  * http://api.malt.io/#anonymous-public-api-recipe-collection
  */
 
 public class RecipeListActivity extends ActionBarActivity {
+    public final boolean TEST = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
+        Log.i("Test", "before brewsky");
+        ArrayList<Recipe> data;
         // Load the recipes
-        Brewsky app = (Brewsky) getApplication();
-        ArrayList<Recipe> data = app.getRecipes();
-        // Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
+        if (!TEST) {
+            Log.i("test", "shouldn't be here");
+            Brewsky app = (Brewsky) getApplication();
+            data = app.getRecipes();
+        } else {
+            data = testingData();
+        }
+        Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
+        Log.i("Test", "after adapter");
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
         recipeList.setAdapter(recipeListAdapter);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -39,6 +50,21 @@ public class RecipeListActivity extends ActionBarActivity {
                 startActivity(recipeDetails);
             }
         });
+    }
+
+    private ArrayList<Recipe> testingData() {
+        ArrayList<Recipe> result = new ArrayList<Recipe>();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("created", "some value");
+        map.put("description", "Some awesome IPA that takes some time do make");
+        map.put("id", "1");
+        map.put("name", "Robby's Mom IPA");
+        map.put("slug", "ew gross");
+        map.put("style", "IPA");
+        map.put("private", "false");
+
+        result.add(new Recipe(map, this));
+        return result;
     }
 
     @Override
