@@ -98,6 +98,13 @@ public class RecipeDetailActivity extends ActionBarActivity {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        float rating = recipe.getRating();
+        ratingBar.setRating(rating);
+    }
+
     public void addListenerOnRatingBar() {
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);

@@ -72,6 +72,9 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
+        adapter.clear();
+        adapter.addAll(data);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
