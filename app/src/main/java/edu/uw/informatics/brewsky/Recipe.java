@@ -34,6 +34,7 @@ public class Recipe {
     private Map<String, String> data;
     private ArrayList<Integer> colorRgb;
     SharedPreferences prefs;
+    private float rating;
 
     public Recipe(Map<String, String> data, Context context){
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,7 +48,9 @@ public class Recipe {
         this.slug = data.remove("slug");
         this.style = data.remove("style");
         this.isPrivate = Boolean.parseBoolean("private");
+        this.rating = 0.0f;
     }
+
 
     /**
      * Returns the name of the recipe
@@ -424,6 +427,8 @@ public class Recipe {
         return this.name;
     }
 
+    public float getRating() { return this.rating; }
+    public void setRating(float rating) { this.rating  = rating; }
     /*
      * Private helper methods
      */

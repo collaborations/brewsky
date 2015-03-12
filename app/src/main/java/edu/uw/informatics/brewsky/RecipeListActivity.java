@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class RecipeListActivity extends ActionBarActivity {
     private ArrayList<Recipe> data;
     private Brewsky app;
     private IntentFilter filter;
+    private RatingBar ratingBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class RecipeListActivity extends ActionBarActivity {
         // Load the recipes
         app = (Brewsky) getApplication();
         data = app.getRecipes();
+
+
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
@@ -67,6 +72,9 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
+        adapter.clear();
+        adapter.addAll(data);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -25,7 +27,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         TextView abv;
         TextView brewTime;
         ImageView type;
-        ImageView rating;
+        RatingBar ratingBar;
     }
 
     public RecipeListAdapter(Context context, int resource, ArrayList<Recipe> data) {
@@ -48,8 +50,9 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             // Set up view
             holder.name = (TextView)row.findViewById(R.id.recipe_list_name);
             holder.abv = (TextView)row.findViewById(R.id.recipe_list_abv);
-            holder.rating = (ImageView)row.findViewById(R.id.recipe_list_rating);
             holder.type = (ImageView)row.findViewById(R.id.recipe_list_type);
+            holder.ratingBar = (RatingBar)row.findViewById(R.id.ratingBar);
+
 
             row.setTag(holder);
         } else {
@@ -61,13 +64,19 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
 //        holder.name.setText("Testing");
 //        holder.abv.setText("8.9%");
 //        holder.brewTime.setText("1 month");
-        holder.rating.setImageResource(R.drawable.three_star);
         holder.type.setImageResource(R.drawable.amber_ale);
 
 
         // This will be used when the backend is set up
         holder.name.setText(recipe.getName());
         holder.abv.setText(Double.toString(recipe.getABV()) + "% ABV");
+        if(recipe.getRating() < 1) {
+            Random rand = new Random();
+            int randomNum = rand.nextInt(6);
+            recipe.setRating(randomNum);
+        }
+        holder.ratingBar.setRating(recipe.getRating());
+
 //        holder.rating.setText(recipe.getRating());
 //        holder.type.setText(recipe.getStyle());
         return row;
