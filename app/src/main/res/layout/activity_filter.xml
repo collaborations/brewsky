@@ -7,65 +7,72 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linear_filter_types">
+        android:layout_alignParentTop="true"
+        android:id="@+id/filter_options">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Style"
-            android:id="@+id/filter_label_style"
-            android:layout_weight="1"
-            android:textIsSelectable="false" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="ABV Range"
-            android:id="@+id/filter_label_abv"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Rating"
-            android:id="@+id/filter_label_rating"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="false"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linear_filters"
-        android:layout_below="@+id/linear_filter_types">
-
-        <Spinner
-            android:id="@+id/filter_style"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/types"
-            android:layout_weight="1"
-            android:spinnerMode="dropdown" />
+            android:layout_weight="1" >
 
-        <Spinner
-            android:id="@+id/filter_abv"
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Style"
+                android:id="@+id/filter_label_style"
+                android:textIsSelectable="false" />
+
+            <Spinner
+                android:id="@+id/filter_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/types"
+                android:spinnerMode="dialog" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/abvs"
-            android:layout_weight="1" />
+            android:layout_weight="1" >
 
-        <Spinner
-            android:id="@+id/filter_rating"
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="ABV Range"
+                android:id="@+id/filter_label_abv" />
+
+            <Spinner
+                android:id="@+id/filter_abv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/abvs"
+                android:spinnerMode="dialog" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/ratings"
-            android:spinnerMode="dropdown"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Rating"
+                android:id="@+id/filter_label_rating" />
+
+            <Spinner
+                android:id="@+id/filter_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/ratings"
+                android:spinnerMode="dialog" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button
@@ -73,14 +80,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/filter_button"
-        android:layout_below="@+id/linear_filters" />
+        android:layout_below="@+id/filter_options"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/filter_list"
-        android:layout_centerVertical="true"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/filter_button"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/filter_button" />
+        android:id="@+id/fragment_filter_list_container"></RelativeLayout>
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -30,23 +31,17 @@ public class RecipeListAdapter extends ArrayAdapter<String> {
         RatingBar ratingBar;
     }
 
-
-
     public RecipeListAdapter(Context context, int resource, ArrayList<String> data) {
-        super(context, resource);
+        super(context, resource, data);
         app = (Brewsky) context.getApplicationContext();
         this.context = context;
         this.data = data;
         this.layoutResourceId = resource;
     }
 
-//    @Override
-//    public int getCount() {
-//        return this.data.size();
-//    };
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+
         View row = convertView;
         RecipeListHolder holder = null;
         if(row == null){

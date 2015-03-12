@@ -1,5 +1,8 @@
 package edu.uw.informatics.brewsky;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,57 +21,57 @@ import java.util.HashSet;
 import java.util.logging.Filter;
 
 
-public class FilterActivity extends ActionBarActivity {
-    private Brewsky app;
-    private RecipeListAdapter adapter;
-    private ListView list;
-    private ArrayList<String> filtered;
-//    private android.widget.Filter filter;
+public class FilterActivity
+        extends ActionBarActivity
+            implements FilterFragment.OnFragmentInteractionListener {
 
+    private Brewsky app;
+    private FragmentManager fragmentManager;
+    private Fragment current;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         app = (Brewsky) getApplication();
-        list = (ListView) findViewById(R.id.filter_list);
-        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>(app.getRecipeIDs()));
-        list.setAdapter(adapter);
-//        filter = adapter.getFilter();
+        fragmentManager = getFragmentManager();
+        id = R.id.fragment_filter_list_container;
+
+        FragmentTransaction t = fragmentManager.beginTransaction();
+        current = FilterFragment.newInstance(new ArrayList<String>(app.getRecipeIDs()), "Hello World");
+        t.add(id, current);
+        t.commit();
 
         Button submit = (Button) findViewById(R.id.filter_button);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String type = String.valueOf(((Spinner) findViewById(R.id.filter_style)).getSelectedItem());
-                String abv = String.valueOf(((Spinner) findViewById(R.id.filter_abv)).getSelectedItem());
-                String rating = String.valueOf(((Spinner) findViewById(R.id.filter_rating)).getSelectedItem());
-                Toast.makeText(FilterActivity.this, type + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
-//                filterRecipes(type, abv, rating);
-                adapter.getCount();
-
+                setFilter();
             }
         });
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent recipeDetails = new Intent(FilterActivity.this, RecipeDetailActivity.class);
-                Recipe clickedRecipe = app.getRecipeByID((String) list.getItemAtPosition(position));
-                recipeDetails.putExtra("recipe", clickedRecipe.getId());
-                startActivity(recipeDetails);
-//                showResults();
-            }
-        });
+    }
+
+    private void setFilter(){
+        String style = String.valueOf(((Spinner) findViewById(R.id.filter_style)).getSelectedItem());
+        String abv = String.valueOf(((Spinner) findViewById(R.id.filter_abv)).getSelectedItem());
+        String rating = String.valueOf(((Spinner) findViewById(R.id.filter_rating)).getSelectedItem());
+
+        Toast.makeText(FilterActivity.this, style + " " + abv + " " + rating, Toast.LENGTH_SHORT).show();
+
+        ArrayList<String> filtered = filterRecipes(style, abv, rating);
+
+        FragmentTransaction t = fragmentManager.beginTransaction();
+        FilterFragment next = FilterFragment.newInstance(filtered, "Hello World");
+        t.replace(id, next);
+        t.commit();
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
-//        if(filtered == null){
-//            filtered = new ArrayList<>(app.getRecipeIDs());
-//        }
-//        showResults();
     }
 
     @Override
@@ -93,36 +96,30 @@ public class FilterActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showResults(){
-        adapter.clear();
-        adapter.addAll(filtered);
-        adapter.notifyDataSetChanged();
+    // Returns an ArrayList of all the IDs that match the filter
+    private ArrayList<String> filterRecipes(String style, String abv, String rating) {
+        ArrayList<String> filtered = new ArrayList<>(app.getRecipeIDs());
+        if(style.equals("All") && abv.equals("All") && rating.equals("All")){
+            Log.i(getString(R.string.log_general), "All filters off");
+        } else {
+            if (!abv.equals("All")) {
+                String[] range = abv.split("-");
+                String end = range[1].substring(0, range[1].length() - 1);
+                filtered.retainAll(app.getRecipesInABVRange(Double.parseDouble(range[0]), Double.parseDouble(end)));
+            }
+            if (!style.equals("All")) {
+                filtered.retainAll(app.getRecipesByStyle(style));
+            }
+            if (!rating.equals("All")) {
+                filtered.retainAll(app.getRecipesByRating(Integer.parseInt(rating.substring(0, 1))));
+            }
+        }
+        return filtered;
     }
 
-    // Returns an ArrayList of all the IDs that match the filter
-    private void filterRecipes(String style, String abv, String rating) {
-
-//        ArrayList<String> filtered = new ArrayList<>(app.getRecipeIDs());
-//        if(style.equals("All") && abv.equals("All") && rating.equals("All")){
-//            Log.i(getString(R.string.log_general), "All filters off");
-//        } else {
-//            if (!abv.equals("All")) {
-//                String[] range = abv.split("-");
-//                String end = range[1].substring(0, range[1].length() - 1);
-//                filtered.retainAll(app.getRecipesInABVRange(Double.parseDouble(range[0]), Double.parseDouble(end)));
-//            }
-//            if (!style.equals("All")) {
-//                filtered.retainAll(app.getRecipesByStyle(style));
-//            }
-//            if (!rating.equals("All")) {
-//                filtered.retainAll(app.getRecipesByRating(Integer.parseInt(rating.substring(0, 1))));
-//            }
-//        }
-//
-//        this.filtered = filtered;
-//        for(String each : filtered){
-//            Log.i("FILTERED: ", each + " --> " + app.getRecipeByID(each));
-//        }
-//        showResults();
+    public void onFragmentListItemClick(String id){
+        Intent showDetails = new Intent(FilterActivity.this, RecipeDetailActivity.class);
+        showDetails.putExtra("recipe", id);
+        startActivity(showDetails);
     }
 }

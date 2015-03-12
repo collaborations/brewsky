@@ -3,6 +3,7 @@ package edu.uw.informatics.brewsky;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -72,6 +73,7 @@ public class Brewsky
         commentsByRecipeID = new HashMap<>();
         styles = new HashMap<String, String>();
         addBeerStyles();
+        Log.i(getString(R.string.log_general), "Finished setting up data structures in Brewsky");
     }
 
     private void addBeerStyles() {
@@ -210,6 +212,12 @@ public class Brewsky
 
     public ArrayList<String> getCommentsByID(String id) {
         return commentsByRecipeID.get(id);
+    }
+
+    public void broadCastNewRecipes(){
+        Intent intent = new Intent(getString(R.string.brewsky_broadcast));
+        intent.setAction(getString(R.string.broadcast_new_recipes));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
 }

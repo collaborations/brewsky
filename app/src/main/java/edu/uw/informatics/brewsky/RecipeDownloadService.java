@@ -76,7 +76,7 @@ public class RecipeDownloadService extends IntentService {
             Log.wtf(getString(R.string.log_wtf), "Exception in RecipeDownloadService.onHandleIntent(): " + e.toString());
         }
 
-        Log.i(getString(R.string.log_general), "Finished: " + count + " recipes downloaded.");
+        Log.i(getString(R.string.log_general), "Finished: " + count + " recipes loaded.");
 
         Intent broad = new Intent("RecipeDownloadService");
         broad.setAction("RECIPE_PARSING_FINISHED");

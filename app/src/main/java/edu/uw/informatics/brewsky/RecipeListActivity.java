@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RatingBar;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 /* List of available recipes
@@ -27,7 +27,6 @@ public class RecipeListActivity extends ActionBarActivity {
     private ArrayList<Recipe> data;
     private Brewsky app;
     private IntentFilter filter;
-    private RatingBar ratingBar;
     private boolean empty;
     private ListView recipeList;
 
@@ -38,8 +37,11 @@ public class RecipeListActivity extends ActionBarActivity {
         setContentView(R.layout.activity_recipe_list);
 
         // Load the recipes
+
         app = (Brewsky) getApplication();
         recipeList = (ListView) findViewById(R.id.recipe_list);
+        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>());
+        recipeList.setAdapter(adapter);
         recipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -49,6 +51,7 @@ public class RecipeListActivity extends ActionBarActivity {
                 startActivity(recipeDetails);
             }
         });
+
         // Register Receiver
         filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
@@ -59,8 +62,10 @@ public class RecipeListActivity extends ActionBarActivity {
     }
 
     private void setAdapter(){
-        adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>());
-        recipeList.setAdapter(adapter);
+        for(String id : app.getRecipeIDs()){
+            adapter.add(id);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -73,9 +78,6 @@ public class RecipeListActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         registerReceiver(broadcastReceiver, filter);
-        if(adapter != null) {
-            reloadData();
-        }
     }
 
     @Override
@@ -115,9 +117,11 @@ public class RecipeListActivity extends ActionBarActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Log.i(getString(R.string.log_general), "Receiving: " + action);
+            Toast.makeText(context, action, Toast.LENGTH_SHORT).show();
             if(action.equals("RECIPE_PARSING_FINISHED")){
                 Log.i("LocalManagerBroadcast", "Received, reloading data.");
-                reloadData();
+//                reloadData();
+                setAdapter();
             } else {
                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 long downloadID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
@@ -128,8 +132,9 @@ public class RecipeListActivity extends ActionBarActivity {
                     if (c.moveToFirst()) {
                         int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                         if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                            Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
-                            reloadData();
+                            Log.i(getString(R.string.log_general), "Finished loading Recipes");
+//                            reloadData();
+                            setAdapter();
                         }
                     }
 
@@ -137,16 +142,4 @@ public class RecipeListActivity extends ActionBarActivity {
             }
         }
     };
-
-    private void reloadData(){
-        if(adapter == null){
-            Log.i(getString(R.string.log_general), "RecipeListAdapter Null, setting");
-            adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, new ArrayList<String>(app.getRecipeIDs()));
-            recipeList.setAdapter(adapter);
-        } else {
-            adapter.clear();
-            adapter.addAll(app.getRecipeIDs());
-            adapter.notifyDataSetChanged();
-        }
-    }
 }
