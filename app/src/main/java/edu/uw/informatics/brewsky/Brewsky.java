@@ -22,8 +22,7 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
-    private static ArrayList<Recipe> recipesList;
-    private ArrayList<Recipe> overallRecipeList;
+    private ArrayList<Recipe> recipeList;
     private HashMap<String, Recipe> recipesByID;
     private HashMap<String, ArrayList<String>> commentsByRecipeID;
     private String type = "All";
@@ -52,8 +51,7 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
-        recipesList = new ArrayList<Recipe>();
-        overallRecipeList = new ArrayList<Recipe>();
+        recipeList = new ArrayList<Recipe>();
         recipesByID = new HashMap<>();
         commentsByRecipeID = new HashMap<>();
         beers = new HashMap<String, String>();
@@ -85,8 +83,7 @@ public class Brewsky
     public void addRecipe(Recipe recipe){
         if(!recipesByID.containsKey(recipe.getId())){
             recipesByID.put(recipe.getId(), recipe);
-            recipesList.add(recipe);
-            overallRecipeList.add(recipe);
+            recipeList.add(recipe);
         }
     }
 
@@ -97,29 +94,17 @@ public class Brewsky
         }
     }
 
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
     // Return the entire list of recipes.
     public ArrayList<Recipe> getRecipes(){
-        if(this.recipesList.size() == 0){
+        if(this.recipeList.size() == 0){
             loadRecipes();
         }
-        return this.overallRecipeList;
-    }
-
-    public ArrayList<Recipe> getRecipiesList() {
-        return recipesList;
+        return this.recipeList;
     }
 
     public ArrayList<Recipe> getRecipes(boolean t) {
-        recipesList.clear();
-        for (Recipe recipe : overallRecipeList) {
+        ArrayList<Recipe> filtered = new ArrayList<>();
+        for (Recipe recipe : recipeList) {
             boolean abvTest = false;
             if (abv.equals("All")) {
                 abvTest = true;
@@ -133,12 +118,12 @@ public class Brewsky
             boolean typeTest = type.equals("All") || beers.get(recipe.getSlug()).equals(type);
             boolean ratingTest = rating.equals("All") || recipe.getRating() == Float.parseFloat(rating.split(" ")[0]);
             if (abvTest && typeTest && ratingTest) {
-                recipesList.add(recipe);
+                filtered.add(recipe);
             }
         }
-        Log.i("current", overallRecipeList.toString());
-        Log.i("result", recipesList.toString());
-        return recipesList;
+        Log.i("current", recipeList.toString());
+        Log.i("result", filtered.toString());
+        return filtered;
     }
 
     public String getType() {
@@ -164,7 +149,7 @@ public class Brewsky
 
     // Returns the number of recipes on the phone
     public int getRecipeCount(){
-        return recipesList.size();
+        return recipeList.size();
     }
 
     public void addComment(String id, String comment) {
