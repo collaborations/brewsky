@@ -26,6 +26,7 @@ public class RecipeListActivity extends ActionBarActivity {
     private RecipeListAdapter adapter;
     private ArrayList<Recipe> data;
     private Brewsky app;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class RecipeListActivity extends ActionBarActivity {
 
         // Load the recipes
         app = (Brewsky) getApplication();
-        data = app.getListRecipes();
+        data = app.getRecipes();
         Log.i(getString(R.string.log_general), "Number of recipes: " + data.size());
         adapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
         final ListView recipeList = (ListView) findViewById(R.id.recipe_list);
@@ -50,10 +51,22 @@ public class RecipeListActivity extends ActionBarActivity {
         });
 
         // Register Receiver
-        IntentFilter filter = new IntentFilter();
+        filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE); // Add more filters here that you want the receiver to listen to
         registerReceiver(broadcastReceiver, filter);
 
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        registerReceiver(broadcastReceiver, filter);
     }
 
     @Override
@@ -65,7 +78,7 @@ public class RecipeListActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle acxtion bar item clicks here. The action bar will
+        // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -100,8 +113,7 @@ public class RecipeListActivity extends ActionBarActivity {
                     int status = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                     if(status == DownloadManager.STATUS_SUCCESSFUL){
                         Log.i(getString(R.string.log_general), "Finished Downloading Recipes");
-                        data = app.getListRecipes();
-                        Log.i(getString(R.string.log_general), "Number Recipes: " + data.size());
+                        data = app.getRecipes();
                         adapter.clear();
                         adapter.addAll(data);
                         adapter.notifyDataSetChanged();

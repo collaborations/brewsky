@@ -2,7 +2,6 @@ package edu.uw.informatics.brewsky;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +33,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         this.context = context;
         this.data = data;
         this.layoutResourceId = resource;
-
-
     }
 
     @Override
@@ -61,10 +58,10 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         }
         Recipe recipe = data.get(position);
         //Set holder variables
-        Log.i("RecipeListActivity", "Need getters from recipe");
-        holder.name.setText("Testing");
-        holder.abv.setText("8.9%");
-        holder.brewTime.setText("1 month");
+//        Log.i("RecipeListActivity", "Need getters from recipe");
+//        holder.name.setText("Testing");
+//        holder.abv.setText("8.9%");
+//        holder.brewTime.setText("1 month");
         holder.rating.setImageResource(R.drawable.three_star);
         holder.type.setImageResource(R.drawable.amber_ale);
 
