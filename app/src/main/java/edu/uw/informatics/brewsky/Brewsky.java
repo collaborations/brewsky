@@ -24,7 +24,7 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
-    private BrewskyDatabaseHelper db;
+    private BrewskyDatabaseHelper dbHelper;
 
 
     private static ArrayList<Recipe> recipesList;
@@ -52,7 +52,7 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
-        this.db = new BrewskyDatabaseHelper(getApplicationContext());
+        this.dbHelper = new BrewskyDatabaseHelper(getApplicationContext());
 
 
         recipesList = new ArrayList<Recipe>();
