@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.uw.informatics.brewsky.sqlite.BrewskyDatabaseHelper;
+
 /**
  * Created by ginoclement on 3/10/15.
  */
@@ -22,6 +24,9 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
+    private BrewskyDatabaseHelper db;
+
+
     private static ArrayList<Recipe> recipesList;
     private ArrayList<Recipe> overallRecipeList;
     private HashMap<String, Recipe> recipesByID;
@@ -31,12 +36,7 @@ public class Brewsky
     private String rating = "All";
     private Map<String, String> beers;
 
-    /* Application manifest throws an error if I set this as private. I don't believe we want a
-     * public constructor though, otherwise you could create another app instance.
-     */
-    public Brewsky(){
-
-    }
+    public Brewsky(){}
 
     public static Brewsky getInstance(){
         return instance;
@@ -52,6 +52,9 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
+        this.db = new BrewskyDatabaseHelper(getApplicationContext());
+
+
         recipesList = new ArrayList<Recipe>();
         overallRecipeList = new ArrayList<Recipe>();
         recipesByID = new HashMap<>();
@@ -67,7 +70,6 @@ public class Brewsky
         beers.put("hefeweizen", "Hefeweizen");
         beers.put("irish-red", "Amber Ale");
         beers.put("test-recipe", "IPA");
-
     }
 
     public Brewsky getApplication(){
