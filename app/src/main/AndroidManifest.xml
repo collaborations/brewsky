@@ -62,7 +62,7 @@
         </activity>
 
         <!-- Services -->
-        <service android:name=".RecipeDownloadService" />
+        <service android:name=".utils.RecipeDownloadService" />
 
         <receiver android:name=".AlarmReceiver" />
 

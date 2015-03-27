@@ -2,10 +2,10 @@ package edu.uw.informatics.brewsky;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.util.ArrayList;
+
+import edu.uw.informatics.brewsky.models.RecipeData;
 
 
 public class FavoritesActivity extends ActionBarActivity {
@@ -17,12 +17,12 @@ public class FavoritesActivity extends ActionBarActivity {
 
         // Load the recipes
         // Change this to get recipes that are currently downloaded
-        ArrayList<Recipe> data = getFavorites();
+        ArrayList<RecipeData> data = getFavorites();
 
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(this, R.layout.recipe_list_row, data);
     }
 
-    private ArrayList<Recipe> getFavorites() {
+    private ArrayList<RecipeData> getFavorites() {
         // TODO: get favorites
 
         return null;

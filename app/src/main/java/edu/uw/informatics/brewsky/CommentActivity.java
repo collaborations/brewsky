@@ -7,13 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.RatingBar;
+
+import edu.uw.informatics.brewsky.models.RecipeData;
 
 
 public class CommentActivity extends ActionBarActivity {
     private Brewsky app;
     private ArrayAdapter commentAdapter;
-    private Recipe recipe;
+    private RecipeData recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class CommentActivity extends ActionBarActivity {
         app = (Brewsky) getApplication();
 
         Intent launchedMe = getIntent();
-        final String recipeID = launchedMe.getStringExtra("recipe");
+        final String recipeID = launchedMe.getStringExtra("recipeData");
         recipe = app.getRecipeByID(recipeID);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }

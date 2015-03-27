@@ -1,18 +1,15 @@
 package edu.uw.informatics.brewsky;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import edu.uw.informatics.brewsky.models.RecipeData;
+import edu.uw.informatics.brewsky.utils.RecipeDownloadService;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -22,9 +19,9 @@ public class Brewsky
         implements RecipeRepository {
 
     private static Brewsky instance;
-    private static ArrayList<Recipe> recipesList;
-    private ArrayList<Recipe> overallRecipeList;
-    private HashMap<String, Recipe> recipesByID;
+    private static ArrayList<RecipeData> recipesList;
+    private ArrayList<RecipeData> overallRecipeList;
+    private HashMap<String, RecipeData> recipesByID;
     private HashMap<String, ArrayList<String>> commentsByRecipeID;
     private String type = "All";
     private String abv = "All";
@@ -52,8 +49,8 @@ public class Brewsky
     public void onCreate(){
         super.onCreate();
         Log.i(getString(R.string.log_general), "Brewsky has been launched");
-        recipesList = new ArrayList<Recipe>();
-        overallRecipeList = new ArrayList<Recipe>();
+        recipesList = new ArrayList<RecipeData>();
+        overallRecipeList = new ArrayList<RecipeData>();
         recipesByID = new HashMap<>();
         commentsByRecipeID = new HashMap<>();
         beers = new HashMap<String, String>();
@@ -66,7 +63,7 @@ public class Brewsky
         beers.put("dark-beer", "Stout");
         beers.put("hefeweizen", "Hefeweizen");
         beers.put("irish-red", "Amber Ale");
-        beers.put("test-recipe", "IPA");
+        beers.put("test-recipeData", "IPA");
 
     }
 
@@ -81,8 +78,8 @@ public class Brewsky
         }
     }
 
-    // Adds a single given recipe to the repository.
-    public void addRecipe(Recipe recipe){
+    // Adds a single given recipeData to the repository.
+    public void addRecipe(RecipeData recipe){
         if(!recipesByID.containsKey(recipe.getId())){
             recipesByID.put(recipe.getId(), recipe);
             recipesList.add(recipe);
@@ -91,8 +88,8 @@ public class Brewsky
     }
 
     // Adds an ArrayList of recipes.
-    public void addRecipes(ArrayList<Recipe> recipes){
-        for (Recipe each: recipes){
+    public void addRecipes(ArrayList<RecipeData> recipes){
+        for (RecipeData each: recipes){
             addRecipe(each);
         }
     }
@@ -106,20 +103,20 @@ public class Brewsky
     }
 
     // Return the entire list of recipes.
-    public ArrayList<Recipe> getRecipes(){
+    public ArrayList<RecipeData> getRecipes(){
         if(this.recipesList.size() == 0){
             loadRecipes();
         }
         return this.overallRecipeList;
     }
 
-    public ArrayList<Recipe> getRecipiesList() {
+    public ArrayList<RecipeData> getRecipiesList() {
         return recipesList;
     }
 
-    public ArrayList<Recipe> getRecipes(boolean t) {
+    public ArrayList<RecipeData> getRecipes(boolean t) {
         recipesList.clear();
-        for (Recipe recipe : overallRecipeList) {
+        for (RecipeData recipe : overallRecipeList) {
             boolean abvTest = false;
             if (abv.equals("All")) {
                 abvTest = true;
@@ -157,8 +154,8 @@ public class Brewsky
         this.abv = abv;
     }
 
-    // Return a recipe with the give ID
-    public Recipe getRecipeByID(String id){
+    // Return a recipeData with the give ID
+    public RecipeData getRecipeByID(String id){
         return recipesByID.get(id);
     }
 

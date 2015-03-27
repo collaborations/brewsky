@@ -2,7 +2,6 @@ package edu.uw.informatics.brewsky;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import edu.uw.informatics.brewsky.models.RecipeData;
+
 /**
  * Created by ginoclement on 3/10/15.
  */
-public class RecipeListAdapter extends ArrayAdapter<Recipe> {
-    private ArrayList<Recipe> data;
+public class RecipeListAdapter extends ArrayAdapter<RecipeData> {
+    private ArrayList<RecipeData> data;
     private Context context;
     private int layoutResourceId;
     private Brewsky app;
@@ -31,7 +32,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         RatingBar ratingBar;
     }
 
-    public RecipeListAdapter(Context context, int resource, ArrayList<Recipe> data) {
+    public RecipeListAdapter(Context context, int resource, ArrayList<RecipeData> data) {
         super(context, resource);
         app = (Brewsky) context.getApplicationContext();
         this.context = context;
@@ -60,7 +61,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         } else {
             holder = (RecipeListHolder)row.getTag();
         }
-        Recipe recipe = data.get(position);
+        RecipeData recipe = data.get(position);
 
         //Set holder variables
         holder.type.setImageResource(R.drawable.amber_ale);

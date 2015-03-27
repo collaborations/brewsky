@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,22 +12,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+
+import edu.uw.informatics.brewsky.models.Fermentable;
+import edu.uw.informatics.brewsky.models.RecipeData;
+import edu.uw.informatics.brewsky.models.Spice;
+import edu.uw.informatics.brewsky.models.Yeast;
 
 
 public class RecipeDetailActivity extends ActionBarActivity {
     private Brewsky app;
     private RatingBar ratingBar;
     private ArrayAdapter commentAdapter;
-    private Recipe recipe;
+    private RecipeData recipe;
 
 
     @Override
@@ -39,7 +39,7 @@ public class RecipeDetailActivity extends ActionBarActivity {
         app = (Brewsky) getApplication();
 
         Intent launchedMe = getIntent();
-        final String recipeID = launchedMe.getStringExtra("recipe");
+        final String recipeID = launchedMe.getStringExtra("recipeData");
         recipe = app.getRecipeByID(recipeID);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         // Set up view
@@ -97,7 +97,7 @@ public class RecipeDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent instructions = new Intent(RecipeDetailActivity.this, RecipeInstructionsActivity.class);
-                instructions.putExtra("recipe", recipe.getId());
+                instructions.putExtra("recipeData", recipe.getId());
                 startActivity(instructions);
             }
         });

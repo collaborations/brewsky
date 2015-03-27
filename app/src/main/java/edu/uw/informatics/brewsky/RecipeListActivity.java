@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,16 +17,16 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import edu.uw.informatics.brewsky.models.RecipeData;
 
 /* List of available recipes
- * http://api.malt.io/#anonymous-public-api-recipe-collection
+ * http://api.malt.io/#anonymous-public-api-recipeData-collection
  */
 
 public class RecipeListActivity extends ActionBarActivity {
     private RecipeListAdapter adapter;
-    private ArrayList<Recipe> data;
+    private ArrayList<RecipeData> data;
     private Brewsky app;
     private IntentFilter filter;
     private RatingBar ratingBar;
@@ -51,8 +50,8 @@ public class RecipeListActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent recipeDetails = new Intent(RecipeListActivity.this, RecipeDetailActivity.class);
-                Recipe clickedRecipe = (Recipe) recipeList.getItemAtPosition(position);
-                recipeDetails.putExtra("recipe", clickedRecipe.getId());
+                RecipeData clickedRecipe = (RecipeData) recipeList.getItemAtPosition(position);
+                recipeDetails.putExtra("recipeData", clickedRecipe.getId());
                 startActivity(recipeDetails);
             }
         });

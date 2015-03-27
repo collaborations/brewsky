@@ -1,7 +1,8 @@
 package edu.uw.informatics.brewsky;
 
-import java.util.HashSet;
 import java.util.ArrayList;
+
+import edu.uw.informatics.brewsky.models.RecipeData;
 
 /**
  * Created by ginoclement on 3/10/15.
@@ -9,16 +10,16 @@ import java.util.ArrayList;
  * Uncommenting these items as they are implemented.
  */
 public interface RecipeRepository {
-    public void addRecipe(Recipe recipe);
-    public void addRecipes(ArrayList<Recipe> recipes);
-    public ArrayList<Recipe> getRecipes();
+    public void addRecipe(RecipeData recipe);
+    public void addRecipes(ArrayList<RecipeData> recipes);
+    public ArrayList<RecipeData> getRecipes();
     public int getRecipeCount();
     public void loadRecipes();
-//    public ArrayList<Recipe> getSortedRecipes(String sortBy, boolean ascending);
-//    public ArrayList<Recipe> getFilteredRecipes(String filterBy);
-//    public ArrayList<Recipe> getFilteredRecipes(ArrayList<String> filterBy);
-//    public ArrayList<Recipe> getRecipesByUser(String userID);
+//    public ArrayList<RecipeData> getSortedRecipes(String sortBy, boolean ascending);
+//    public ArrayList<RecipeData> getFilteredRecipes(String filterBy);
+//    public ArrayList<RecipeData> getFilteredRecipes(ArrayList<String> filterBy);
+//    public ArrayList<RecipeData> getRecipesByUser(String userID);
 //    //Internally just calls getFilteredRecipes
-//    public ArrayList<Recipe> getRecipesByStyle(String style);
-//    public Recipe getRecipeByID(String id);
+//    public ArrayList<RecipeData> getRecipesByStyle(String style);
+//    public RecipeData getRecipeByID(String id);
 }

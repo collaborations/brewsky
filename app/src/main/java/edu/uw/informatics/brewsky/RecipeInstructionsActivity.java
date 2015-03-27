@@ -14,8 +14,10 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.Map;
 
-/* Recipe Instructions
- * http://api.malt.io/#recipes-recipe-get
+import edu.uw.informatics.brewsky.models.RecipeData;
+
+/* RecipeData Instructions
+ * http://api.malt.io/#recipes-recipeData-get
  */
 
 public class RecipeInstructionsActivity
@@ -23,7 +25,7 @@ public class RecipeInstructionsActivity
         implements TaskFragment.OnFragmentInteractionListener {
 
     private Brewsky app;
-    private Recipe recipe;
+    private RecipeData recipe;
     private FragmentManager fragmentManager;
     private ArrayList<TaskFragment> tasks;
     private int current;
@@ -37,7 +39,7 @@ public class RecipeInstructionsActivity
         setContentView(R.layout.activity_recipe_instructions);
         app = (Brewsky) getApplication();
         Intent parent = getIntent();
-        recipe = app.getRecipeByID(parent.getStringExtra("recipe"));
+        recipe = app.getRecipeByID(parent.getStringExtra("recipeData"));
         fragmentManager = getFragmentManager();
         taskContainer = R.id.tasks_container;
         current = 0;
